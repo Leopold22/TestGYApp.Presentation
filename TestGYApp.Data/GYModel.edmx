@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GY_ContentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblClients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="card_number" Type="nvarchar" MaxLength="25" />
+          <Property Name="cl_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="date_of_birth" Type="datetime2" Precision="0" />
+          <Property Name="old_count" Type="smallint" />
+          <Property Name="child" Type="bit" />
+          <Property Name="old_man" Type="bit" />
+          <Property Name="adress" Type="nvarchar(max)" />
+          <Property Name="tel_number" Type="nvarchar" MaxLength="15" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="primechanie" Type="nvarchar(max)" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="SSMA_TimeStamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="GY_ContentModelStoreContainer">
+          <EntitySet Name="tblClients" EntityType="Self.tblClients" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GY_ContentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblClients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="card_number" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="cl_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="date_of_birth" Type="DateTime" Precision="0" />
+          <Property Name="old_count" Type="Int16" />
+          <Property Name="child" Type="Boolean" />
+          <Property Name="old_man" Type="Boolean" />
+          <Property Name="adress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tel_number" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="primechanie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="SSMA_TimeStamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityContainer Name="GY_ContentEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblClients" EntityType="Self.tblClients" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GY_ContentModelStoreContainer" CdmEntityContainer="GY_ContentEntities">
+          <EntitySetMapping Name="tblClients">
+            <EntityTypeMapping TypeName="GY_ContentModel.tblClients">
+              <MappingFragment StoreEntitySet="tblClients">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="card_number" ColumnName="card_number" />
+                <ScalarProperty Name="cl_name" ColumnName="cl_name" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="old_count" ColumnName="old_count" />
+                <ScalarProperty Name="child" ColumnName="child" />
+                <ScalarProperty Name="old_man" ColumnName="old_man" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+                <ScalarProperty Name="tel_number" ColumnName="tel_number" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="primechanie" ColumnName="primechanie" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="SSMA_TimeStamp" ColumnName="SSMA_TimeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,18 @@
+﻿body {
+}
+
+#myNavBarRow {
+    /*background-color: #490B41;*/
+}
+
+#myHeaderPanel {
+    height: 30px;
+    background-color: #333333;
+}
+
+.navbar-header {
+    background-color: #490B41;
+    border:none;
+
+}
+

@@ -1,0 +1,64 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="TestMasterPage.master.cs" Inherits="TestGYApp.Presentation.TestMasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <%--<link href="Content/bootstrap.min.css" rel="stylesheet" />--%>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="TestMasterPageStyle.css" rel="stylesheet" />
+</head>
+<body>
+    <form id="testMasterForm" runat="server">
+        <div class="container">
+            <div class="row" id="myHeaderPanel"> 
+            </div>
+            <div class="row" id="myNavBarRow">
+                <div class="navbar  navbar-inverse">
+                    <div class="container">
+                        <div class="navbar-header" >
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#responsive-menu" >
+                                <span class="sr-only">Открыть навигацию</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+
+
+                            </button>
+                            <%--<a class="navbar-brand" href="#">Home</a>--%>
+                        </div>
+                        <div class="collapse navbar-collapse" id="responsive-menu"  >
+                            <ul class="nav navbar-nav" >
+                                <li><a href="#">Ссылка1</a></li>
+                                <li><a href="#">Ссылка2</a></li>
+                                <li><a href="#">Ссылка3</a></li>
+                                <li><a href="#">Ссылка4</a></li>                                
+                            </ul>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div>
+            <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+    <%--<script src="Scripts/bootstrap.min.js"></script>--%>
+    <script src="Scripts/bootstrap.js"></script>
+    <%--<script src="Scripts/jquery-3.1.1.min.js"></script>--%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0//jquery.min.js"></script>
+    <%--https://ajax.googleapis.com/ajax/libs/jquery/1.11.0//jquery.min.js--%>
+</body>
+</html>

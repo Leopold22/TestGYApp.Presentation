@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GY_ContentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="GY_ContentEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblClients" EntityType="GY_ContentModel.tblClients" />
+  </EntityContainer>
+  <EntityType Name="tblClients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="card_number" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="cl_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="date_of_birth" Type="DateTime" Precision="0" />
+    <Property Name="old_count" Type="Int16" />
+    <Property Name="child" Type="Boolean" />
+    <Property Name="old_man" Type="Boolean" />
+    <Property Name="adress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="tel_number" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="primechanie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="deleted" Type="Boolean" />
+    <Property Name="SSMA_TimeStamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+  </EntityType>
+</Schema>

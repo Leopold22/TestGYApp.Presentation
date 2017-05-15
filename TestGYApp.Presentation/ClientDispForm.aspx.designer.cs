@@ -22,6 +22,15 @@ namespace TestGYApp.Presentation {
         protected global::System.Web.UI.HtmlControls.HtmlForm clientDispForm;
         
         /// <summary>
+        /// LastNameTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox LastNameTextBox;
+        
+        /// <summary>
         /// NameTextBox control.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,15 @@ namespace TestGYApp.Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox NameTextBox;
+        
+        /// <summary>
+        /// PatronymicTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox PatronymicTextBox;
         
         /// <summary>
         /// PhoneTextBox control.
@@ -65,5 +83,23 @@ namespace TestGYApp.Presentation {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox CommentTextBox;
+        
+        /// <summary>
+        /// OkButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button OkButton;
+        
+        /// <summary>
+        /// CancelButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button CancelButton;
     }
 }

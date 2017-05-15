@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GY_ContentModelClients" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="String" MaxLength="105" FixedLength="true" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="35" FixedLength="true" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="35" FixedLength="true" Unicode="true" />
+    <Property Name="Patronymic" Type="String" MaxLength="35" FixedLength="true" Unicode="true" />
+    <Property Name="BirthDate" Type="DateTime" Precision="0" />
+    <Property Name="Age" Type="Int16" />
+    <Property Name="IsChild" Type="Boolean" />
+    <Property Name="IsOldMan" Type="Boolean" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Deleted" Type="Boolean" />
+    <Property Name="cl_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MarketingInfo" Type="Int32" />
+    <NavigationProperty Name="MarketingInfoChoice" Relationship="GY_ContentModelClients.FK_Clients_MarketingInfoChoice" FromRole="Clients" ToRole="MarketingInfoChoice" />
+  </EntityType>
+  <EntityContainer Name="GY_ContentEntitiesMain" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clients" EntityType="Self.Clients" />
+    <EntitySet Name="MarketingInfoChoice" EntityType="GY_ContentModelClients.MarketingInfoChoice" />
+    <AssociationSet Name="FK_Clients_MarketingInfoChoice" Association="GY_ContentModelClients.FK_Clients_MarketingInfoChoice">
+      <End Role="MarketingInfoChoice" EntitySet="MarketingInfoChoice" />
+      <End Role="Clients" EntitySet="Clients" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="MarketingInfoChoice">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Deleted" Type="Boolean" />
+    <NavigationProperty Name="Clients" Relationship="GY_ContentModelClients.FK_Clients_MarketingInfoChoice" FromRole="MarketingInfoChoice" ToRole="Clients" />
+  </EntityType>
+  <Association Name="FK_Clients_MarketingInfoChoice">
+    <End Type="GY_ContentModelClients.MarketingInfoChoice" Role="MarketingInfoChoice" Multiplicity="0..1" />
+    <End Type="GY_ContentModelClients.Clients" Role="Clients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MarketingInfoChoice">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Clients">
+        <PropertyRef Name="MarketingInfo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

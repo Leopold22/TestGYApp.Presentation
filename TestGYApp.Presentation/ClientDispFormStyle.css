@@ -1,0 +1,27 @@
+﻿body {
+background-color: white;
+
+}
+
+.cardForm {
+    background-color:#80D1DD ;    
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    padding: 10px;
+    border-radius: 8px;
+    margin-left: 20px;
+}
+
+.tableHolder {
+
+margin-left: 40px;
+}
+
+.clientInfoTable {
+margin-left: 10px;
+
+}
+td {
+align-items:baseline;
+
+}
+

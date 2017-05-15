@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GY_ContentModelStoreContainer" CdmEntityContainer="GY_ContentEntities">
+    <EntitySetMapping Name="tblClients">
+      <EntityTypeMapping TypeName="GY_ContentModel.tblClients">
+        <MappingFragment StoreEntitySet="tblClients">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="card_number" ColumnName="card_number" />
+          <ScalarProperty Name="cl_name" ColumnName="cl_name" />
+          <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+          <ScalarProperty Name="old_count" ColumnName="old_count" />
+          <ScalarProperty Name="child" ColumnName="child" />
+          <ScalarProperty Name="old_man" ColumnName="old_man" />
+          <ScalarProperty Name="adress" ColumnName="adress" />
+          <ScalarProperty Name="tel_number" ColumnName="tel_number" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="primechanie" ColumnName="primechanie" />
+          <ScalarProperty Name="deleted" ColumnName="deleted" />
+          <ScalarProperty Name="SSMA_TimeStamp" ColumnName="SSMA_TimeStamp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

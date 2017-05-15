@@ -19,7 +19,7 @@ namespace TestGYApp.Presentation
         {
             DataTable clients = new DataTable();
             clients.Columns.Add("cl_name");
-            clients.Columns.Add("tel_number");
+            clients.Columns.Add("Phone");
             clients.Rows.Add();
             MyClientsGridView.DataSource = clients;
             MyClientsGridView.DataBind();
@@ -50,7 +50,7 @@ namespace TestGYApp.Presentation
                     sda.SelectCommand = cmd;
                     using (DataSet ds = new DataSet())
                     {
-                        sda.Fill(ds, "tblClients");
+                        sda.Fill(ds, "Clients");
                         DataTable dt = new DataTable("Pager");
                         dt.Columns.Add("PageIndex");
                         dt.Columns.Add("PageSize");

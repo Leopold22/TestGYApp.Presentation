@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GY_ContentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tblClients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="card_number" Type="nvarchar" MaxLength="25" />
+    <Property Name="cl_name" Type="nvarchar" MaxLength="100" />
+    <Property Name="date_of_birth" Type="datetime2" Precision="0" />
+    <Property Name="old_count" Type="smallint" />
+    <Property Name="child" Type="bit" />
+    <Property Name="old_man" Type="bit" />
+    <Property Name="adress" Type="nvarchar(max)" />
+    <Property Name="tel_number" Type="nvarchar" MaxLength="15" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" />
+    <Property Name="primechanie" Type="nvarchar(max)" />
+    <Property Name="deleted" Type="bit" />
+    <Property Name="SSMA_TimeStamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="GY_ContentModelStoreContainer">
+    <EntitySet Name="tblClients" EntityType="Self.tblClients" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

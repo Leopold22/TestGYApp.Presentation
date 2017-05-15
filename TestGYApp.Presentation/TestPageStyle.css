@@ -9,10 +9,11 @@ a:visited {
 
 table {
     border: 1px solid #ccc;
+    margin: auto;   
 }
 
     table th {
-        background-color: #7B44D4;
+        background-color: #490b41;
         color: #FFF;
         font-weight: bold;
     }
@@ -23,7 +24,7 @@ table {
     }
 
     table tr:nth-child(odd) {
-        background-color: #D5C6EE
+        background-color: #edcee9
     }
 
     table tr:nth-child(even) {
@@ -62,4 +63,52 @@ table {
 
 .highlight {
     background-color: #08350D;
+}
+
+
+.tablegrid {
+margin:auto;
+}
+
+.gridClients {
+align-items: center;
+
+}
+
+/*input:placeholder-shown {
+  color: orange;
+}*/
+
+
+/*для плейсхолдера фильтров*/
+    ::-webkit-input-placeholder { /* Safari, Chrome and Opera */
+      color: grey;
+      font-style:italic;
+      opacity: 0.7;
+    }
+
+    :-moz-placeholder { /* Firefox */
+      color: grey;
+      font-style:italic;
+      opacity: 0.7;
+    }
+
+    :-ms-input-placeholder { /* IE 10+ */
+      color: grey;
+      font-style:italic;
+      opacity: 0.7;
+    }
+
+.AddClientButton:hover {
+    background-image: url('~/Images/AddButton-hover.png')
+}
+
+/*.FullNameCol {
+    column-width: 400px;
+
+}*/
+
+.ui-datepicker-trigger {
+
+height: 22px;
 }

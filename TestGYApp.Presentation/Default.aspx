@@ -20,12 +20,12 @@
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:HyperLinkField DataNavigateUrlFields="id" DataNavigateUrlFormatString="/ClientDispForm.aspx?id={0}" DataTextField="cl_name" Text="Имя" AccessibleHeaderText="Имя" HeaderText="Имя" />
-                <%--<asp:BoundField DataField="tel_number" DataFormatString="{0: (000)-000-00-00}" HeaderText="Телефон" />--%>
+                <%--<asp:BoundField DataField="Phone" DataFormatString="{0: (000)-000-00-00}" HeaderText="Телефон" />--%>
              
                    <asp:TemplateField HeaderText="Телефон" ConvertEmptyStringToNull="False">
                         <ItemTemplate> 
         <asp:Literal ID="litPhone" runat="server" 
-            Text='<%# Eval("tel_number")  == null || Eval("tel_number")  == "" ?  "" : string.Format("{0:(###) ###-####}", Int64.Parse(Eval("tel_number").ToString())) %>' />
+            Text='<%# Eval("Phone")  == null || Eval("Phone")  == "" ?  "" : string.Format("{0:(###) ###-####}", Int64.Parse(Eval("Phone").ToString())) %>' />
     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>

@@ -1,304 +1,185 @@
 ﻿
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TestPage.aspx.cs" Inherits="TestGYApp.Presentation.TestPage"  %>
-<%--<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TestPage.aspx.cs" Inherits="TestGYApp.Presentation.TestPage" MasterPageFile="~/TestMasterPage.Master" %>--%>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TestPage.aspx.cs" Inherits="TestGYApp.Presentation.TestPage" MasterPageFile="~/TestMasterPage.Master" %>
 
-
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-
- <%--    <style type="text/css">
-        body
-        {
-            font-family: Arial;
-            font-size: 10pt;
-        }
-         a:visited 
-         {
-             color: blue;
-         }
-        table
-        {
-            border: 1px solid #ccc;
-        }
-        table th
-        {
-            background-color: #7B44D4;
-            color: #FFF;
-            font-weight: bold;
-            
-        }
-        table th, table td
-        {
-            padding: 5px;
-            border-color: #ccc;
-        }
-
-        table tr:nth-child(odd)
-        {
-            background-color: #D5C6EE
-        }
-
-         table tr:nth-child(even) {
-         background-color: white
-         }
-
-         
-
-        .Pager
-        {
-            margin-top: 10px;
-
-        }
-        .Pager span
-        {
-            color: #333;
-            background-color: #F7F7F7;
-            font-weight: bold;
-            text-align: center;
-            display: inline-block;
-            width: 20px;
-            margin-right: 3px;
-            line-height: 150%;
-            border: 1px solid #ccc;
-        }
-        .Pager a
-        {
-            text-align: center;
-            display: inline-block;
-            width: 20px;
-            border: 1px solid #ccc;
-            color: #fff;
-            color: #333;
-            margin-right: 3px;
-            line-height: 150%;
-            text-decoration: none;
-        }
-        .highlight
-        {
-            background-color: #08350D;
-        }
-    </style>--%>
-
-
-</head>
-<body>
- <form id="testForm" runat="server">
     
 <%--плейсхолдер:--%>
-<%--<asp:Content ID="MainContent" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">--%>
+<asp:Content ID="MainContent" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
    
-    <div>
     
-        Список клиентов<br />
-        Имя: <asp:TextBox ID="NameFilterTextBox" runat="server" OnTextChanged="NameFilterTextBox_TextChanged"></asp:TextBox>
-&nbsp;<asp:Button ID="OkButton" runat="server" Text="OK" />
-<%--        <script type="text/javascript">
-            function NameFilterTextBox_TextChanged(sender, args) {
-                __doPostBack('NameFilterTextBox', '');
-             }
- </script>--%>
+    <div class="container">
+        <div class="row">
 
-             <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-         <%--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0//jquery.min.js"></script>--%>
-         <%--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>--%>
+            <div class="tablegrid">
 
-<script src="/Scripts/ASPSnippets_Pager.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-    $(function () {
-        GetClients(1);
-    });
-    $("[id*=NameFilterTextBox]").live("keyup", function () {
-        GetClients(parseInt(1));
-    });
-    $(".Pager .page").live("click", function () {
-        GetClients(parseInt($(this).attr('page')));
-    });
-    function SearchTerm() {
-        return jQuery.trim($("[id*=NameFilterTextBox]").val());
-    };
-    function GetClients(pageIndex) {
-        $.ajax({
-            type: "POST",
-            url: "TestPage.aspx/GetClients",
-            data: '{searchTerm: "' + SearchTerm() + '", pageIndex: ' + pageIndex + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: OnSuccess,
-            failure: function (response) {
-                alert(response.d);
-            },
-            error: function (response) {
-                alert(response.d);
-            }
-        });
-    }
-    var row;
-    function OnSuccess(response) {
-        var xmlDoc = $.parseXML(response.d);
-        var xml = $(xmlDoc);
-        var clients = xml.find("tblClients");
-        if (row == null) {
-            row = $("[id*=MyClientsGridView] tr:last-child").clone(true);
-        }
-        $("[id*=MyClientsGridView] tr").not($("[id*=MyClientsGridView] tr:first-child")).remove();
-        if (clients.length > 0) {
-            $.each(clients, function () {
-                var customer = $(this);
-                //Заполняем имя как ссылку на форму просмотра
-                $("td", row).eq(0).html("<a href=\"/ClientDispForm.aspx?id=" + $(this).find("ID").text() + "\">" + $(this).find("cl_name").text() + "</a>");
-                //Заполняем номер телефона
-                $("td", row).eq(1).html($(this).find("tel_number").text());
+                <div>
+                       
 
-                //форматируем номер телефона
-                $("td", row).eq(1).text(function (i, text) {
-                    return text.replace(/(\d{0})(\d{3})(\d{3})(\d{2})/, '$1($2) $3-$4-');
-                });
 
+                    <%--jQuery:--%>
+                    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+                    <%--Пейджер:--%>
+                    <script src="/Scripts/ASPSnippets_Pager.min.js" type="text/javascript"></script>
+
+                    <%--Фильтрация грида:--%>
+                    <script src="Scripts/ClientsGridFiltration.js"></script>
+                    <%--Блокировка запрещенных символов в фильтре:--%>
+                    <script src="Scripts/ClientsBlockRestrictedCharacters.js"></script>
+                    <%--Поведение фильтров:--%>
+                    <script src="Scripts/ClientsFiltersBehavior.js"></script>
+
+
+                     <%-- Date picker --%>
+                      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+                     <%--<script src="//code.jquery.com/jquery-1.12.4.js"></script>--%>
+                     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                    <script src="Scripts/datepicker-ru.js"></script>
+
+                    <%-- Работа с датами: --%>
+                    <%--<script src="Scripts/moment.min.js"></script>--%>
+                    <%--<script src="Scripts/datejs.js"></script>--%>
+                    <script src="Scripts/jquery.dateFormat-1.0.js"></script>
+
+
+
+                    Список клиентов<br />
+                    <br />
+                    <asp:TextBox ID="FirstNameFilterTextBox" runat="server" placeholder="Имя..." Width="192px" Height="25px"></asp:TextBox>
+                    &nbsp;&nbsp;&nbsp; 
+       <asp:TextBox ID="LastNameFilterTextBox" runat="server" placeholder="Фамилия..." Width="192px" Height="25px"></asp:TextBox>
+                    &nbsp;&nbsp;&nbsp;             
+        
+        <asp:TextBox ID="PatronymicFilterTextBox" runat="server" placeholder="Отчество..." Width="192px" Height="25px"></asp:TextBox>
+                    &nbsp;&nbsp;&nbsp;
+        <asp:TextBox ID="PhoneFilterTextBox" runat="server" placeholder="Телефон..." Width="192px" Height="25px"></asp:TextBox>
+                    &nbsp;&nbsp;&nbsp;
+        <%--<span id="FakeAgeFilterTextbox" class="fakeAgeFilter" onmouseover="this.style.visibility = 'hidden'; document.getElementById('ageFilterSpan').style.visibility = 'visible' " onmouseout="this.style.visibility = 'visible'">--%>
+
+                    <span id="AgeOuterFilterSpan" class="AgeOuterFilterSpan">
+
+                        <span id="AgeCoverFilterSpan" class="AgeCoverFilterSpan">
+                            <asp:TextBox ID="AgeCoverFilterTextbox" runat="server" placeholder="Возраст..." Width="192px" Height="25px"></asp:TextBox>
+                        </span>
+
+                        <span class="AgeFilterSpan" id="AgeFilterSpan">
+                            <asp:TextBox ID="AgeFromFilterTextBox" runat="server" Width="90px" Height="25px"></asp:TextBox>
+                            <asp:Label ID="AgeFilterDashLabel" runat="server" Text="-"> </asp:Label>
+                            <asp:TextBox ID="AgeToFilterTextBox" runat="server" Width="90px" Height="25px"></asp:TextBox>
+                        </span>
+
+                    </span>
+
+
+
+                    <br />
+                    <br />
+                    <asp:DropDownList ID="MarketingInfoDropDownFilter" runat="server" DataSourceID="MarketingInfoSqlDataSource" DataTextField="Name" DataValueField="ID" AppendDataBoundItems="True" placeholder="Телефон..." Width="192px" Height="25px">
+                        <asp:ListItem Selected="True" Enabled="True" Value="" Text=""> </asp:ListItem>
+                    </asp:DropDownList>
+                      &nbsp;&nbsp;&nbsp;  
+                    <%--<asp:TextBox ID="BirthDateFromFilterTextBox" runat="server"/>--%>
+
+
+
+
+
+
+                        <span id="BirthDateOuterFilterSpan" class="BirthDateOuterFilterSpan">
+
+                        <span id="BirthDateCoverFilterSpan" class="BirthDateCoverFilterSpan">
+                            <asp:TextBox ID="BirthDateCoverFilterTextbox" runat="server" placeholder="Дата рождения..." Width="192px" Height="25px"></asp:TextBox>
+                        </span>
+
+                        <span class="BirthDateFilterSpan" id="BirthDateFilterSpan">
+                            <asp:TextBox ID="BirthDateFromFilterTextBox" runat="server" Width="70px" Height="25px"></asp:TextBox>
+                            <asp:Label ID="BirthDateFilterDashLabel" runat="server" Text="-"> </asp:Label>
+                            <asp:TextBox ID="BirthDateToFilterTextBox" runat="server" Width="70px" Height="25px"></asp:TextBox>
+                        </span>
+
+                    </span>
+
+
+
+
+
+
+                    <asp:SqlDataSource ID="MarketingInfoSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:GY_ContentConnectionString %>" SelectCommand="SELECT * FROM [MarketingInfoChoice]"></asp:SqlDataSource>
+
+
+
+
+
+                    <br />
+
+
+
+                    <%-- СКРИПТЫ:--%>
+                    <%--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0//jquery.min.js"></script>--%>&nbsp;
+        
+       
+       
+        <div class="container-fluid">
+            <div class="row">
+                <div class="gridClients">
+                    <asp:ImageButton ID="AddClientButton" runat="server" ImageUrl="~/Images/AddButton.png" CssClass="AddClientButton" OnClick="AddClientButton_Click" Height="40px" />
+                    <asp:ImageButton ID="ClearFiltersButton" runat="server" ImageUrl="~/Images/filterTest.png" CssClass="AddClientButton" Height="40px" OnClientClick="return false" />                    
+                    <asp:ImageButton ID="ReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="AddClientButton" Height="40px" OnClick="ReportButton_Click" />
+                    
                 
-                $("[id*=MyClientsGridView]").append(row);
-                row = $("[id*=MyClientsGridView] tr:last-child").clone(true);
-            });
-            var pager = xml.find("Pager");
-            $(".Pager").ASPSnippets_Pager({
-                ActiveCssClass: "current",
-                PagerCssClass: "pager",
-                PageIndex: parseInt(pager.find("PageIndex").text()),
-                PageSize: parseInt(pager.find("PageSize").text()),
-                RecordCount: parseInt(pager.find("RecordCount").text())
-            });
- 
-            $(".cl_name").each(function () {
-                var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
-                $(this).html($(this).text().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
-            });
-        } else {
-            var empty_row = row.clone(true);
-            $("td:first-child", empty_row).attr("colspan", $("td", row).length);
-            $("td:first-child", empty_row).attr("align", "center");
-            $("td:first-child", empty_row).html("По заданным критериям ничего не найдено.");
-            $("td", empty_row).not($("td:first-child", empty_row)).remove();
-            $("[id*=MyClientsGridView]").append(empty_row);
-        }
-    };
-</script>
 
-
-
-
-
-
-        <br />
-        <br />
-        <asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False"    >
-        <%--<asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="id" AllowPaging="false"  DataSourceID="ClientsSqlDataSource" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal" OnPageIndexChanging="MyClientsGridView_PageIndexChanging">--%>
-            <Columns>
-                <%--<asp:BoundField DataField="id" HeaderText="id" InsertVisible="False" ReadOnly="True" SortExpression="id" />--%>
-                <%--<asp:BoundField DataField="card_number" HeaderText="card_number" SortExpression="card_number" />--%>
-                <%--<asp:BoundField DataField="cl_name" HeaderText="cl_name" SortExpression="cl_name" />--%>
-                <%--<asp:BoundField DataField="date_of_birth" HeaderText="date_of_birth" SortExpression="date_of_birth" />--%>
-                <%--<asp:BoundField DataField="old_count" HeaderText="old_count" SortExpression="old_count" />--%>
-                <%--<asp:CheckBoxField DataField="child" HeaderText="child" SortExpression="child" />--%>
-                <%--<asp:CheckBoxField DataField="old_man" HeaderText="old_man" SortExpression="old_man" />--%>
-                <%--<asp:BoundField DataField="adress" HeaderText="adress" SortExpression="adress" />--%>
-                <%--<asp:BoundField DataField="tel_number" HeaderText="tel_number" SortExpression="tel_number" />--%>
-                <%--<asp:BoundField DataField="email" HeaderText="email" SortExpression="email" />--%>
-                <%--<asp:BoundField DataField="primechanie" HeaderText="primechanie" SortExpression="primechanie" />--%>
-                <%--<asp:CheckBoxField DataField="deleted" HeaderText="deleted" SortExpression="deleted" />--%>
-         
-
-                    <asp:BoundField  HeaderText="Имя" SortExpression="cl_name" />
-                <asp:BoundField  HeaderText="Телефон" SortExpression="tel_number" />
-
+                    <%--<asp:Image ID="testImg" runat="server" ImageUrl="~/Images/filterTest.png"  Height="40px" />--%>
+                    
                 
-             <%--       <asp:BoundField DataField="cl_name" HeaderText="Имя" SortExpression="cl_name" />
-                <asp:BoundField DataField="tel_number" HeaderText="Телефон" SortExpression="tel_number" />--%>
-               
-<%--                <asp:HyperLinkField DataNavigateUrlFields="id" DataNavigateUrlFormatString="/ClientDispForm.aspx?id={0}" DataTextField="cl_name" Text="Имя" AccessibleHeaderText="Имя" HeaderText="Имя" />
-               
-                <asp:TemplateField HeaderText="Телефон" ConvertEmptyStringToNull="False">
-                    <ItemTemplate> 
-                        <asp:Literal ID="litPhone" runat="server" 
-                        Text='<%# Eval("tel_number")  == null || Eval("tel_number").ToString()  == "" ?  "" : string.Format("{0:(###) ###-####}", Int64.Parse(Eval("tel_number").ToString())) %>' />
-                    </ItemTemplate>
-                </asp:TemplateField>--%>
+
+                    <asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False" >
+                        <%--<asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="id" AllowPaging="false"  DataSourceID="ClientsSqlDataSource" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal" OnPageIndexChanging="MyClientsGridView_PageIndexChanging">--%>
+                        <Columns>
+                            <asp:BoundField HeaderText="Имя" SortExpression="FullName">
+                                <ItemStyle Width="200px" CssClass="FullNameCol" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="Телефон" SortExpression="Phone">
+                                <ItemStyle Width="120px" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="Дата рождения" SortExpression="BirthDate">
+                                <ItemStyle Width="105px" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="Возраст" SortExpression="Age">
+                                <ItemStyle Width="70px" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="E-mail" SortExpression="Email">
+                                <ItemStyle Width="180px" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="Примечание" SortExpression="Comment">
+                                <ItemStyle Width="280px" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="Откуда узнал о клубе" SortExpression="MarketingInfo">
+                                <ItemStyle Width="215px" />
+                            </asp:BoundField>
 
 
 
-                  </Columns>
-
-<%--            <FooterStyle BackColor="#CCCC99" ForeColor="Black" />
-            <HeaderStyle BackColor="#7B44D4" Font-Bold="True" ForeColor="White" />
-            <PagerStyle BackColor="#7B44D4" ForeColor="White" HorizontalAlign="Right" />
-            <SelectedRowStyle BackColor="#CC3333" Font-Bold="True" ForeColor="White" />
-            <SortedAscendingCellStyle BackColor="#F7F7F7" />
-            <SortedAscendingHeaderStyle BackColor="#4B4B4B" />
-            <SortedDescendingCellStyle BackColor="#E5E5E5" />
-            <SortedDescendingHeaderStyle BackColor="#242121" />
-            <RowStyle BackColor="White" ForeColor="Black" />
-            <AlternatingRowStyle BackColor="#D5C6EE" ForeColor="Black" />--%>
+                        </Columns>
+                    </asp:GridView>
+                </div>
+            </div>
+        </div>
 
 
-        </asp:GridView>
-        <asp:SqlDataSource ID="ClientsSqlDataSource" runat="server" 
-            ConnectionString="<%$ ConnectionStrings:GY_ContentConnectionString %>" 
-            DeleteCommand="DELETE FROM [tblClients] WHERE [id] = @id" 
-            InsertCommand="INSERT INTO [tblClients] ([card_number], [cl_name], [date_of_birth], [old_count], [child], [old_man], [adress], [tel_number], [email], [primechanie], [deleted], [SSMA_TimeStamp]) VALUES (@card_number, @cl_name, @date_of_birth, @old_count, @child, @old_man, @adress, @tel_number, @email, @primechanie, @deleted, @SSMA_TimeStamp)" 
-            SelectCommand="SELECT * FROM [tblClients]" 
-            UpdateCommand="UPDATE [tblClients] SET [card_number] = @card_number, [cl_name] = @cl_name, [date_of_birth] = @date_of_birth, [old_count] = @old_count, [child] = @child, [old_man] = @old_man, [adress] = @adress, [tel_number] = @tel_number, [email] = @email, [primechanie] = @primechanie, [deleted] = @deleted, [SSMA_TimeStamp] = @SSMA_TimeStamp WHERE [id] = @id"
-            FilterExpression="cl_name LIKE'%{0}%'">
-            <FilterParameters>
-                <asp:ControlParameter Name="cl_name" ControlID="NameFilterTextBox" PropertyName="Text" />
-            </FilterParameters>
+                </div>
 
-            <DeleteParameters>
-                <asp:Parameter Name="id" Type="Int32" />
-            </DeleteParameters>
-            <InsertParameters>
-                <asp:Parameter Name="card_number" Type="String" />
-                <asp:Parameter Name="cl_name" Type="String" />
-                <asp:Parameter DbType="DateTime2" Name="date_of_birth" />
-                <asp:Parameter Name="old_count" Type="Int16" />
-                <asp:Parameter Name="child" Type="Boolean" />
-                <asp:Parameter Name="old_man" Type="Boolean" />
-                <asp:Parameter Name="adress" Type="String" />
-                <asp:Parameter Name="tel_number" Type="String" />
-                <asp:Parameter Name="email" Type="String" />
-                <asp:Parameter Name="primechanie" Type="String" />
-                <asp:Parameter Name="deleted" Type="Boolean" />
-                <asp:Parameter Name="SSMA_TimeStamp" Type="Object" />
-            </InsertParameters>
-            <UpdateParameters>
-                <asp:Parameter Name="card_number" Type="String" />
-                <asp:Parameter Name="cl_name" Type="String" />
-                <asp:Parameter DbType="DateTime2" Name="date_of_birth" />
-                <asp:Parameter Name="old_count" Type="Int16" />
-                <asp:Parameter Name="child" Type="Boolean" />
-                <asp:Parameter Name="old_man" Type="Boolean" />
-                <asp:Parameter Name="adress" Type="String" />
-                <asp:Parameter Name="tel_number" Type="String" />
-                <asp:Parameter Name="email" Type="String" />
-                <asp:Parameter Name="primechanie" Type="String" />
-                <asp:Parameter Name="deleted" Type="Boolean" />
-                <asp:Parameter Name="SSMA_TimeStamp" Type="Object" />
-                <asp:Parameter Name="id" Type="Int32" />
-            </UpdateParameters>
-        </asp:SqlDataSource>
-    
+            </div>
+
+        </div>
     </div>
 
-        <div class="Pager">
-</div>
-        <link rel="stylesheet" type="text/css" href="TestPageStyle.css" />
-    
+    <div class="container">
+        <div class="row">
+            <div class="Pager">
+            </div>
+            <link rel="stylesheet" type="text/css" href="TestPageStyle.css" />
+        </div>
+    </div>
 
-<%--плейсхолдер:--%>
-        <%--</asp:Content>--%>
 
-</form>
+        </asp:Content>
 
-</body>
-</html>
 

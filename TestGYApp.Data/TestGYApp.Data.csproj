@@ -40,9 +40,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,26 +53,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clients.cs">
+      <DependentUpon>MainContentModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ClientsRepository.cs" />
-    <Compile Include="GYModel.Context.cs">
+    <Compile Include="MainContentModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GYModel.Context.tt</DependentUpon>
+      <DependentUpon>MainContentModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="GYModel.cs">
+    <Compile Include="MainContentModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GYModel.tt</DependentUpon>
+      <DependentUpon>MainContentModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="GYModel.Designer.cs">
+    <Compile Include="MainContentModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GYModel.edmx</DependentUpon>
+      <DependentUpon>MainContentModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="MarketingInfoChoice.cs">
+      <DependentUpon>MainContentModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="tblClients.cs">
-      <DependentUpon>GYModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestGYApp.DTO\TestGYApp.DTO.csproj">
@@ -79,28 +84,28 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="GYModel.edmx">
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="MainContentModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>GYModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>MainContentModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="GYModel.edmx.diagram">
-      <DependentUpon>GYModel.edmx</DependentUpon>
+    <None Include="MainContentModel.edmx.diagram">
+      <DependentUpon>MainContentModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GYModel.Context.tt">
+    <Content Include="MainContentModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GYModel.edmx</DependentUpon>
-      <LastGenOutput>GYModel.Context.cs</LastGenOutput>
+      <DependentUpon>MainContentModel.edmx</DependentUpon>
+      <LastGenOutput>MainContentModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="GYModel.tt">
+    <Content Include="MainContentModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GYModel.edmx</DependentUpon>
-      <LastGenOutput>GYModel.cs</LastGenOutput>
+      <DependentUpon>MainContentModel.edmx</DependentUpon>
+      <LastGenOutput>MainContentModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

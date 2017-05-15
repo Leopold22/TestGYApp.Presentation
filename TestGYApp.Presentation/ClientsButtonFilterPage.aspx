@@ -37,7 +37,7 @@
                 <%--<asp:CheckBoxField DataField="child" HeaderText="child" SortExpression="child" />--%>
                 <%--<asp:CheckBoxField DataField="old_man" HeaderText="old_man" SortExpression="old_man" />--%>
                 <%--<asp:BoundField DataField="adress" HeaderText="adress" SortExpression="adress" />--%>
-                <%--<asp:BoundField DataField="tel_number" HeaderText="tel_number" SortExpression="tel_number" />--%>
+                <%--<asp:BoundField DataField="Phone" HeaderText="Phone" SortExpression="Phone" />--%>
                 <%--<asp:BoundField DataField="email" HeaderText="email" SortExpression="email" />--%>
                 <%--<asp:BoundField DataField="primechanie" HeaderText="primechanie" SortExpression="primechanie" />--%>
                 <%--<asp:CheckBoxField DataField="deleted" HeaderText="deleted" SortExpression="deleted" />--%>
@@ -46,7 +46,7 @@
                                    <asp:TemplateField HeaderText="Телефон" ConvertEmptyStringToNull="False">
                         <ItemTemplate> 
         <asp:Literal ID="litPhone" runat="server" 
-            Text='<%# Eval("tel_number")  == null || Eval("tel_number").ToString()  == "" ?  "" : string.Format("{0:(###) ###-####}", Int64.Parse(Eval("tel_number").ToString())) %>' />
+            Text='<%# Eval("Phone")  == null || Eval("Phone").ToString()  == "" ?  "" : string.Format("{0:(###) ###-####}", Int64.Parse(Eval("Phone").ToString())) %>' />
     </ItemTemplate>
                 </asp:TemplateField>
 
@@ -74,10 +74,10 @@
         </asp:GridView>
         <asp:SqlDataSource ID="ClientsSqlDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:GY_ContentConnectionString %>" 
-            DeleteCommand="DELETE FROM [tblClients] WHERE [id] = @id" 
-            InsertCommand="INSERT INTO [tblClients] ([card_number], [cl_name], [date_of_birth], [old_count], [child], [old_man], [adress], [tel_number], [email], [primechanie], [deleted], [SSMA_TimeStamp]) VALUES (@card_number, @cl_name, @date_of_birth, @old_count, @child, @old_man, @adress, @tel_number, @email, @primechanie, @deleted, @SSMA_TimeStamp)" 
-            SelectCommand="SELECT * FROM [tblClients]" 
-            UpdateCommand="UPDATE [tblClients] SET [card_number] = @card_number, [cl_name] = @cl_name, [date_of_birth] = @date_of_birth, [old_count] = @old_count, [child] = @child, [old_man] = @old_man, [adress] = @adress, [tel_number] = @tel_number, [email] = @email, [primechanie] = @primechanie, [deleted] = @deleted, [SSMA_TimeStamp] = @SSMA_TimeStamp WHERE [id] = @id"
+            DeleteCommand="DELETE FROM [] WHERE [id] = @id" 
+            InsertCommand="INSERT INTO [] ([card_number], [cl_name], [date_of_birth], [old_count], [child], [old_man], [adress], [Phone], [email], [primechanie], [deleted], [SSMA_TimeStamp]) VALUES (@card_number, @cl_name, @date_of_birth, @old_count, @child, @old_man, @adress, @Phone, @email, @primechanie, @deleted, @SSMA_TimeStamp)" 
+            SelectCommand="SELECT * FROM []" 
+            UpdateCommand="UPDATE [] SET [card_number] = @card_number, [cl_name] = @cl_name, [date_of_birth] = @date_of_birth, [old_count] = @old_count, [child] = @child, [old_man] = @old_man, [adress] = @adress, [Phone] = @Phone, [email] = @email, [primechanie] = @primechanie, [deleted] = @deleted, [SSMA_TimeStamp] = @SSMA_TimeStamp WHERE [id] = @id"
             FilterExpression="cl_name LIKE'%{0}%'">
             <FilterParameters>
                 <asp:ControlParameter Name="cl_name" ControlID="NameFilterTextBox" PropertyName="Text" />
@@ -94,7 +94,7 @@
                 <asp:Parameter Name="child" Type="Boolean" />
                 <asp:Parameter Name="old_man" Type="Boolean" />
                 <asp:Parameter Name="adress" Type="String" />
-                <asp:Parameter Name="tel_number" Type="String" />
+                <asp:Parameter Name="Phone" Type="String" />
                 <asp:Parameter Name="email" Type="String" />
                 <asp:Parameter Name="primechanie" Type="String" />
                 <asp:Parameter Name="deleted" Type="Boolean" />
@@ -108,7 +108,7 @@
                 <asp:Parameter Name="child" Type="Boolean" />
                 <asp:Parameter Name="old_man" Type="Boolean" />
                 <asp:Parameter Name="adress" Type="String" />
-                <asp:Parameter Name="tel_number" Type="String" />
+                <asp:Parameter Name="Phone" Type="String" />
                 <asp:Parameter Name="email" Type="String" />
                 <asp:Parameter Name="primechanie" Type="String" />
                 <asp:Parameter Name="deleted" Type="Boolean" />

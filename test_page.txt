@@ -1,2 +1,6 @@
 original code
+<<<<<<< HEAD
 1-st user super change
+=======
+2-nd user change
+>>>>>>> 0e36b953f1d24d0620342d0ceb9f19a6e549036f

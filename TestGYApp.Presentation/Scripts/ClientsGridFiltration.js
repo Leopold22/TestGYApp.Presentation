@@ -5,7 +5,7 @@ $(function () {
 });
 
 
-//Вызов фильтрации по keyup
+//Вызов фильтрации по изменению значений в фильтрах
     //Имя:
     $("[id*=FirstNameFilterTextBox]").live("keyup", function () {
     GetClients(parseInt(1));
@@ -42,17 +42,30 @@ $(function () {
     });
 
     //Дата рождения от:
-    $("[id*=BirthDateFromFilterTextBox]").live("keyup", function () {
+    $("[id*=BirthDateFromFilterTextBox]").live("change", function () { 
         GetClients(parseInt(1));
     });
 
     //Дата рождения  до:
-    $("[id*=BirthDateToFilterTextBox]").live("keyup", function () {
+    $("[id*=BirthDateToFilterTextBox]").live("change", function () {
         GetClients(parseInt(1));
     });
 
 
-
+//валидация даты:
+    function DateValidation(date) {
+        //проверяем дату на соответствие маске dd.mm.yyyy:
+        var isValidMask = date.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+        if (isValidMask === null)
+            return false;
+        //если маска корректная, проверяем валидность даты:
+        var d = +isValidMask[1], m = +isValidMask[2], y = +isValidMask[3];
+        var date = new Date(y, m - 1, d);
+        if (date.getFullYear() === y && date.getMonth() === m - 1) {
+            return true;
+        }
+        return false;
+    }
 
 
 
@@ -123,19 +136,27 @@ $("[id*=ClearFiltersButton]").live("click", function () {
 
 
     //Дата рождения от:
-    function SearchTermAgeFrom() {
-
-        var dateFrom = new Date(jQuery.trim($("[id*=BirthDateFromFilterTextBox]").val()));
-
-        return dateFrom;
+    function SearchTermBirthDateFrom() {   
+        var filterVal = jQuery.trim($("[id*=BirthDateFromFilterTextBox]").val());
+        var result = null;
+        if (filterVal !== "" &&  DateValidation(filterVal)) {        
+            result = filterVal;    
+        }    
+        return result;
     };
 
 
     //Дата рождения до:
-    function SearchTermAgeTo() {
-        var dateTo = new Date(jQuery.trim($("[id*=BirthDateToFilterTextBox]").val()));
+    function SearchTermBirthDateTo() {
 
-        return dateTo;
+
+        var filterVal = jQuery.trim($("[id*=BirthDateToFilterTextBox]").val());
+        var result = null;
+        if (filterVal !== "" && DateValidation(filterVal)) {
+            result = filterVal;
+        }
+        return result;
+
     };
 
 
@@ -154,12 +175,8 @@ function GetClients(pageIndex) {
             ,"searchTermMarketingInfo": SearchTermMarketingInfo()
             , "searchTermAgeFrom": SearchTermAgeFrom() 
             , "searchTermAgeTo": SearchTermAgeTo()
-
-
-            , "searchTermBirthDateFrom": SearchTermAgeFrom()
-            , "searchTermBirthDateTo": SearchTermAgeTo()
-
-
+            , "searchTermBirthDateFrom": SearchTermBirthDateFrom()
+            , "searchTermBirthDateTo": SearchTermBirthDateTo()
             , "pageIndex": pageIndex 
         }),
 
@@ -173,8 +190,8 @@ function GetClients(pageIndex) {
             alert("failure");
         },
         error: function (response) {
-            alert(response.d);
-            alert("error");
+          alert(response.d);
+           alert("error");
         }
     });
 }
@@ -230,12 +247,20 @@ function OnSuccess(response) {
             PageIndex: parseInt(pager.find("PageIndex").text()),
             PageSize: parseInt(pager.find("PageSize").text()),
             RecordCount: parseInt(pager.find("RecordCount").text())
+
+
+
         });
  
         $(".cl_name").each(function () {
             var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
             $(this).html($(this).text().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
+           
         });
+
+        
+        $(".Pager").show();
+
     } else { //если ничего не найдено:
         var empty_row = row.clone(true);
         $("td:first-child", empty_row).attr("colspan", $("td", row).length);
@@ -245,6 +270,9 @@ function OnSuccess(response) {
         $("td:first-child", empty_row).html("По заданным критериям ничего не найдено.");
         $("td", empty_row).not($("td:first-child", empty_row)).remove();
         $("[id*=MyClientsGridView]").append(empty_row);
+       
+        $(".Pager").hide(); 
+
     }
 };
 

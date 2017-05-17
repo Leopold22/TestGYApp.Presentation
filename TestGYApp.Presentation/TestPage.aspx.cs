@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 //using Excel = Microsoft.Office.Interop.Excel;
 using System.Web;
+using System.Globalization;
 
 namespace TestGYApp.Presentation
 {
@@ -39,9 +40,9 @@ namespace TestGYApp.Presentation
         }
 
         [WebMethod]
-        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, DateTime? searchTermBirthDateFrom, DateTime? searchTermBirthDateTo, int pageIndex)
-        {
-           return Business.ClientsManager.GetClients(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom,  searchTermBirthDateTo, pageIndex, pageSize);
+        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex)
+        {     
+            return Business.ClientsManager.GetClients(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize);
         }
 
         public static DataSet GetData(SqlCommand cmd, int pageIndex)

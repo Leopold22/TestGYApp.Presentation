@@ -29,33 +29,10 @@ namespace TestGYApp.Business
             Data.ClientsRepository.UpdateClient(clientID, firstName, lastName, patronymic);
         }
 
-        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, DateTime? searchTermBirthDateFrom, DateTime? searchTermBirthDateTo, int pageIndex, int pageSize)
+        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
             
         {
-
-            DateTime? testBDF = new DateTime?();
-            DateTime? testBDT = new DateTime?();
-
-            //if (searchTermBirthDateFrom == null || searchTermBirthDateTo == null)
-            //{
-            //    testBDF = null;
-            //    testBDF = null;
-            //}
-            //else
-            //{
-            //    testBDF = DateTime.Parse(searchTermBirthDateFrom);
-            //    testBDT = DateTime.Parse(searchTermBirthDateTo);
-            //}
-            //    testBDF = null;
-            // testBDT = null;
-
-            testBDF = DateTime.Parse("2002-02-01 00:00:00.000");
-            testBDT = DateTime.Parse("2015-02-01 00:00:00.000");
-
-
-
-
-            return Data.ClientsRepository.GetClients(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, testBDF, testBDT, pageIndex, pageSize);
+            return Data.ClientsRepository.GetClients(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize);
         }
 
         public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize)

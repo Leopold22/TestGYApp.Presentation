@@ -2,8 +2,16 @@
 //*********** ФИЛЬТР ПО ДИАПАЗОНУ ВОЗРАСТА *************\\
 
 //при загрузке страницы скрываем span с двойным фильтром
-$(function () { 
-    $('span.AgeFilterSpan').hide();
+$(function () {
+
+    if ($("[id*=AgeFromFilterTextBox]").val() == '' && $("[id*=AgeToFilterTextBox]").val() == '') {
+        $('span.AgeFilterSpan').hide();
+        $('span.AgeCoverFilterSpan').show();
+    }
+    else {
+        $('span.AgeFilterSpan').show();
+        $('span.AgeCoverFilterSpan').hide();
+    }
 });
 
 //показываем двойной фильтр когда мышь внутри внешнего контейнера
@@ -44,6 +52,7 @@ $('span.AgeOuterFilterSpan').live("blur", function () {
 
 //*********** ФИЛЬТР ПО ДИАПАЗОНУ ДАТ РОЖДЕНИЯ *************\\
 
+//при открытии страницы скрываем двойной фильтр + выставляем параметры дейтпикеров 
 $(function () {
 
     $('span.BirthDateFilterSpan').hide();
@@ -58,6 +67,7 @@ $(function () {
          //   showButtonPanel: true
         }
     );
+
 
     $("[id*=BirthDateToFilterTextBox]").datepicker(
         {
@@ -75,9 +85,6 @@ $(function () {
 });
 
 
-$(function () {
-    $('span.BirthDateFilterSpan').hide();
-});
 
 //показываем двойной фильтр когда мышь внутри внешнего контейнера
 $('span.BirthDateOuterFilterSpan').live("mouseenter", function () {
@@ -101,14 +108,32 @@ $('span.BirthDateOuterFilterSpan').live("mouseleave", function () {
 
 //скрываем двойной фильтр при клике в другую область если фильтры пустые
 $('span.BirthDateOuterFilterSpan').live("blur", function () {
-    if ($("[id*=BirthDateFromFilterTextBox]").val() == ''
-        && $("[id*=BirthDateToFilterTextBox]").val() == ''
+
+    var BirthDateFrom = $("[id*=BirthDateFromFilterTextBox]").val();
+    var BirthDateTo = $("[id*=BirthDateToFilterTextBox]").val();
+
+    if (BirthDateFrom == ''
+        && BirthDateTo == ''
+        && ($("[id*=BirthDateFromFilterTextBox]").is(':focus') == false) //не было
         && ($("[id*=BirthDateToFilterTextBox]").is(':focus') == false)
         && ($('span.BirthDateOuterFilterSpan:hover').length == 0)
         && ($("[id=ui-datepicker-div]").is(':hover') == false)
     ) {
+   
         $('span.BirthDateFilterSpan').hide();
         $('span.BirthDateCoverFilterSpan').show();
+    }
+
+
+
+    if (BirthDateFrom !== "" &&  !DateValidation(BirthDateFrom)) {
+       // alert("BirthDateFrom not valid");
+        $("[id*=BirthDateFromFilterTextBox]").val("");
+       
+    }
+    if (BirthDateTo !== "" && !DateValidation(BirthDateTo)) {
+       // alert("BirthDateTo not valid");
+        $("[id*=BirthDateToFilterTextBox]").val("") ;
     }
 });
 
@@ -121,7 +146,7 @@ $("[id=ui-datepicker-div]").live("click", function () {
     var myDate = $.format.date(ndate, "yyyy-mm-dd hh:mm:ss");
   // var myDate = new Date(ndate).format.toString('yyyy-mm-dd hh:mm:ss');
   // myDate.format('yyyy-mm-dd hh:mm:ss');
-  alert($.format.date(ndate, "yyyy-mm-dd hh:mm:ss"));
+ // alert($.format.date(ndate, "yyyy-mm-dd hh:mm:ss"));
 
     //alert($("[id*=BirthDateFromFilterTextBox]").val((new Date()).toString('dd.M.yy')).toString());
 });

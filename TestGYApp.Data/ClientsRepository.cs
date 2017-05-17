@@ -98,7 +98,7 @@ namespace TestGYApp.Data
 
 
 
-        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo,  DateTime? searchTermBirthDateFrom, DateTime? searchTermBirthDateTo, int pageIndex, int pageSize)
+        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
 
             
         {
@@ -112,23 +112,12 @@ namespace TestGYApp.Data
             cmd.Parameters.AddWithValue("@SearchTermMarketingInfo", searchTermMarketingInfo);
             cmd.Parameters.AddWithValue("@AgeFrom", searchTermAgeFrom);
             cmd.Parameters.AddWithValue("@AgeTo", searchTermAgeTo);
-
             cmd.Parameters.AddWithValue("@BirthDateFrom", searchTermBirthDateFrom);
             cmd.Parameters.AddWithValue("@BirthDateTo", searchTermBirthDateTo);
-
-            //cmd.Parameters.AddWithValue("@BirthDateFrom", "1999-02-01 00:00:00.000");
-            //cmd.Parameters.AddWithValue("@BirthDateTo", "1984-02-01 00:00:00.000");
-
-            //cmd.Parameters.AddWithValue("@BirthDateFrom", "1980-02-21T18:10:00");
-            //cmd.Parameters.AddWithValue("@BirthDateTo", "2012-02-21T18:10:00");
-
-            //2012-02-21T18:10:00
-
-
             cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
             cmd.Parameters.AddWithValue("@PageSize", pageSize);
             cmd.Parameters.Add("@RecordCount", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
-            return GetData(cmd, pageIndex, pageSize).GetXml();
+            return GetData(cmd, pageIndex, pageSize).GetXml(); 
         }
 
         public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize)

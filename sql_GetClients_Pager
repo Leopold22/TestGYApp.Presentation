@@ -1,0 +1,161 @@
+USE [GY_Content]
+GO
+/****** Object:  StoredProcedure [dbo].[GetClients_Pager]    Script Date: 17.05.2017 13:03:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetClients_Pager]
+       @SearchTermName VARCHAR(100) = ''  --фильтр Имя
+	   ,@searchTermLastName VARCHAR(100) = ''  --фильтр Фамилия
+	   ,@searchTermPatronymic VARCHAR(100) = '' --фильтр Отчество
+	  ,@SearchTermPhone VARCHAR(100) = '' --фильтр Телефон
+	  ,@SearchTermMarketingInfo VARCHAR(100) = '' --фильтр МаркетигИнфо
+	 ,@MarketingCondition VARCHAR(100) = '' --итоговое условие МаркетигИнфо
+      ,@PageIndex INT = 1 --номер страницы по умолчанию
+      ,@PageSize INT = 10 --размер страницы по умолчанию
+      ,@RecordCount INT OUTPUT --количество записей, выходной параметр
+	  ,@AgeFrom INT = null -- возраст от
+	  ,@AgeTo INT = null -- возраст до
+	  ,@BirthDateFrom  VARCHAR(100) = NULL --'1970-04-03 00:00:00' --дата рождения от
+	  ,@BirthDateTo  VARCHAR(100) =  NULL --'1990-04-03 00:00:00' --дата рождения до
+
+AS
+BEGIN 
+
+      SET NOCOUNT ON;	
+	  ----------------------------------------------------------------------------------------
+	  -------------------- Предварительная обработка входящих параметров ---------------------
+	  
+	  --Преобразовываем формат значений фильтров по дате dd.mm.yyyy  -->  mm.dd.yyyy hh:mm:ss  
+	 
+	 	  IF (@BirthDateFrom IS NOT NULL)    --если фильтр дата от  не пустой
+	  BEGIN
+		SET  @BirthDateFrom = SUBSTRING(@BirthDateFrom, 4,3) + SUBSTRING(@BirthDateFrom, 1,3) + SUBSTRING(@BirthDateFrom, 7,4) + ' 00:00:00' 
+	  END
+
+	   	  IF (@BirthDateTo IS NOT NULL)    --если фильтр дата от  не пустой
+	  BEGIN  	
+		 SET  @BirthDateTo = SUBSTRING(@BirthDateTo, 4,3) + SUBSTRING(@BirthDateTo, 1,3) + SUBSTRING(@BirthDateTo, 7,4) + ' 00:00:00' 
+	  END
+	 ----------------------------------------------------------------------------------------
+	 ----------------------------------------------------------------------------------------
+	  
+	  
+	  
+	     
+
+      SELECT   --формируем таблицу #prelResults с результатами всех фильтров, кроме подстановочных
+	  cl.[ID]
+      ,cl.[cl_name]
+      ,cl.Phone	  
+      ,cl.[FullName]
+      ,cl.[LastName]
+      ,cl.[FirstName]
+      ,cl.[Patronymic]
+      ,CONVERT(varchar, cl.[BirthDate], 104)   AS [BirthDate]
+	  , [BirthDate] as [BirthDateTime]
+      , (CONVERT(int,CONVERT(char(8),GETDATE(),112))-CONVERT(char(8),BirthDate,112))/10000 as Age
+      ,cl.[IsChild]
+      ,cl.[IsOldMan]
+      ,cl.[Address]      
+      ,cl.[Email]
+      ,cl.[Comment]
+      ,cl.[Deleted]
+	  ,cl.MarketingInfo as [MarketingInfoID]
+	  ,mic.[Name] AS [MarketingInfo]
+
+     
+      INTO #prelResults
+      FROM [Clients] cl Left join [MarketingInfoChoice] mic on 
+	  cl.MarketingInfo = mic.id
+
+
+
+      WHERE   --отсекаем удаленные  и не отвечающие фильтрам записи
+	  (cl.deleted = 0 or cl.deleted is null) and
+	  (cl.FirstName LIKE '%' + @SearchTermName + '%' OR @SearchTermName = '') and
+	  (cl.LastName LIKE '%' + @searchTermLastName + '%' OR @searchTermLastName = '') and
+	  (cl.Patronymic LIKE '%' + @searchTermPatronymic + '%' OR @searchTermPatronymic = '') and
+	  (cl.Phone LIKE '%' + @SearchTermPhone + '%' OR @SearchTermPhone = '') 
+	  
+
+	  --обработка условий на фильтры подстановки
+	  IF (@SearchTermMarketingInfo <> '')    --если фильтр МаркетигИнфо не пустой, отсекаем неудовлетворяющие записи
+	  BEGIN  
+		  SET  @MarketingCondition = @SearchTermMarketingInfo
+		  DELETE FROM #prelResults WHERE (#prelResults.[MarketingInfoID] <> (@MarketingCondition)) OR (#prelResults.[MarketingInfoID] is null);
+	  END
+	 
+
+	 ----------------- обработка условий на диапазонные фильтры--------------------------------------
+
+	 	  IF (@AgeFrom IS NOT NULL)    --если фильтр дата от  не пустой, отсекаем неудовлетворяющие записи
+	  BEGIN  	
+		  DELETE FROM #prelResults WHERE (#prelResults.Age < @AgeFrom OR (#prelResults.Age is null) );
+	  END
+
+	  	 IF (@AgeTo IS NOT NULL)    --если фильтр дата до не пустой, отсекаем неудовлетворяющие записи
+	  BEGIN  	
+		  DELETE FROM #prelResults WHERE (#prelResults.Age > @AgeTo OR (#prelResults.Age is null));
+	  END
+
+	  	IF (CAST(@BirthDateFrom AS datetime2) IS NOT NULL)    --если фильтр "дата рождения от"   не пустой, отсекаем неудовлетворяющие записи
+	  BEGIN  	
+		  DELETE FROM #prelResults WHERE ( CAST(#prelResults.[BirthDateTime] AS datetime2)     < CAST(@BirthDateFrom AS datetime2)  OR ( CAST(#prelResults.[BirthDateTime] AS datetime2)  is null) );
+	  END
+
+	    	IF (CAST(@BirthDateTo AS datetime2) IS NOT NULL)    --если фильтр "дата рождения до"   не пустой, отсекаем неудовлетворяющие записи
+	  BEGIN  	
+		  DELETE FROM #prelResults WHERE ( CAST(#prelResults.[BirthDateTime] AS datetime2)     > CAST(@BirthDateTo AS datetime2)  OR ( CAST(#prelResults.[BirthDateTime] AS datetime2)  is null) );
+	  END
+	   ------------------------------------------------------------------------------------
+
+	 
+	  SELECT --обработанную таблицу таблицу #prelResults заливаем в таблицу #Results с счетчиком записей (RowNumber)
+	  ROW_NUMBER() OVER
+      (
+            ORDER BY #prelResults.[ID] ASC
+      )AS RowNumber, 
+	  
+	  #prelResults.[Address],
+	   #prelResults.Age,
+	   #prelResults.BirthDate,
+	   #prelResults.cl_name,
+	   #prelResults.Comment,
+	   #prelResults.Deleted,
+	   #prelResults.Email,
+	   #prelResults.FirstName,
+	   #prelResults.FullName,
+	   #prelResults.ID,
+	   #prelResults.IsChild,
+	   #prelResults.IsOldMan,
+	   #prelResults.LastName,
+	   #prelResults.MarketingInfo,
+	   #prelResults.MarketingInfoID,
+	   #prelResults.Patronymic,
+	   #prelResults.Phone  
+	  
+	  
+	  
+	  INTO #Results  FROM #prelResults
+	   
+
+  SELECT --выводим записи для заданной страницы
+  * FROM #Results 
+  WHERE RowNumber BETWEEN(@PageIndex -1) * @PageSize + 1 AND(((@PageIndex -1) * @PageSize + 1) + @PageSize) - 1;
+
+SELECT --подсчитываем общее кол-во элементов
+@RecordCount = COUNT(*)
+FROM #Results
+    
+DROP TABLE #Results --сбрасываем #Results
+END
+
+
+
+
+
+
+

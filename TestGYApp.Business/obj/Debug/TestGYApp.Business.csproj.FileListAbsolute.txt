@@ -54,3 +54,15 @@ C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYAp
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Business\obj\Debug\TestGYApp.Business.csprojResolveAssemblyReference.cache
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Business\obj\Debug\TestGYApp.Business.dll
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Business\obj\Debug\TestGYApp.Business.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.Business.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.Business.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.Data.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.DTO.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\EntityFramework.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.Data.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.Data.dll.config
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\TestGYApp.DTO.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\bin\Debug\EntityFramework.xml
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\obj\Debug\TestGYApp.Business.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\obj\Debug\TestGYApp.Business.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Business\obj\Debug\TestGYApp.Business.pdb

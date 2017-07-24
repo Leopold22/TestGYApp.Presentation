@@ -13,3 +13,8 @@ C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYAp
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Presentation\TestGYApp.Presentation\TestGYApp.DTO\obj\Debug\TestGYApp.DTO.dll
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Presentation\TestGYApp.Presentation\TestGYApp.DTO\obj\Debug\TestGYApp.DTO.pdb
 C:\Users\lpolyakov\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.DTO\obj\Debug\TestGYApp.DTO.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.DTO\bin\Debug\TestGYApp.DTO.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.DTO\bin\Debug\TestGYApp.DTO.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.DTO\obj\Debug\TestGYApp.DTO.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.DTO\obj\Debug\TestGYApp.DTO.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.DTO\obj\Debug\TestGYApp.DTO.pdb

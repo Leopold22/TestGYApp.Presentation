@@ -11,13 +11,15 @@
 
     <link href="Content/bootstrap.css" rel="stylesheet" />
     <link href="TestMasterPageStyle.css" rel="stylesheet" />
-
-
+    
+  
 
 </head>
 <body>
+
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1//jquery.min.js"></script>
     <script src="Scripts/bootstrap.js"></script>
+        <script src="Scripts/bootbox.min.js"></script>
 
     <form id="testMasterForm" runat="server">
         <div class="container">

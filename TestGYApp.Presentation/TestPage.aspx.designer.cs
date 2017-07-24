@@ -13,6 +13,15 @@ namespace TestGYApp.Presentation {
     public partial class TestPage {
         
         /// <summary>
+        /// CheckedItemsCollector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox CheckedItemsCollector;
+        
+        /// <summary>
         /// FirstNameFilterTextBox control.
         /// </summary>
         /// <remarks>
@@ -157,13 +166,22 @@ namespace TestGYApp.Presentation {
         protected global::System.Web.UI.WebControls.ImageButton ClearFiltersButton;
         
         /// <summary>
-        /// ReportButton control.
+        /// ServerReportButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton ReportButton;
+        protected global::System.Web.UI.WebControls.ImageButton ServerReportButton;
+        
+        /// <summary>
+        /// ClientReportButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton ClientReportButton;
         
         /// <summary>
         /// MyClientsGridView control.

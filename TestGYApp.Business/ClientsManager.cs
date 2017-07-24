@@ -29,35 +29,69 @@ namespace TestGYApp.Business
             Data.ClientsRepository.UpdateClient(clientID, firstName, lastName, patronymic);
         }
 
-        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
+        //получение элементов списка (всех, либо для конкретной страницы)
+        public static string GetClients(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize, bool getAllItems)
             
         {
-            return Data.ClientsRepository.GetClients(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize);
+            return Data.ClientsRepository.GetClients(sortOrder, searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize, getAllItems);
         }
 
-        public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize)
+        public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize, string sortOrder, bool getAllItems)
         {
-            return Data.ClientsRepository.GetData(cmd, pageIndex, pageSize);
+            return Data.ClientsRepository.GetData(cmd, pageIndex, pageSize, sortOrder, getAllItems);
         }
 
 
 
 
 
+        //универсализация эксперимент
 
+            
 
-
-
-        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, int pageIndex, int pageSize)
+        public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
 
         {
-            return Data.ClientsRepository.GetClientsForExcel(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, pageIndex, pageSize);
+            return Data.ClientsRepository.GetClientsPageGrid( sortOrder,  searchTermName,  searchTermLastName,  searchTermPatronymic,  searchTermPhone,  searchTermMarketingInfo,  searchTermAgeFrom,  searchTermAgeTo,  searchTermBirthDateFrom,  searchTermBirthDateTo,  pageIndex,  pageSize);
         }
 
-        public static DataTable GetDataForExcel(SqlCommand cmd, int pageIndex, int pageSize)
+
+
+        ////для всех  для данной страницы
+        //public static string GetClients(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
+
+        //{
+        //    bool getAllItems = false;
+        //    return Data.ClientsRepository.GetClients(sortOrder, searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize, getAllItems);
+        //}
+
+        //public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize, string sortOrder)
+        //{
+        //    bool getAllItems = false;
+        //    return Data.ClientsRepository.GetData(cmd, pageIndex, pageSize, sortOrder, getAllItems);
+        //}
+
+
+
+
+
+
+
+
+
+
+
+        //Получение таблицы с клиентами для Excel-отчета
+        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+
         {
-            return Data.ClientsRepository.GetDataForExcel(cmd, pageIndex, pageSize);
+            return Data.ClientsRepository.GetClientsForExcel( searchTermName,  searchTermLastName,  searchTermPatronymic,  searchTermPhone,  searchTermMarketingInfo,  searchTermAgeFrom,  searchTermAgeTo,  searchTermBirthDateFrom,  searchTermBirthDateTo);
         }
+
+        //public static DataTable GetDataForExcel(SqlCommand cmd, int pageIndex, int pageSize)
+        //{
+        //    return Data.ClientsRepository.GetDataForExcel(cmd, pageIndex, pageSize);
+        //}
 
 
 

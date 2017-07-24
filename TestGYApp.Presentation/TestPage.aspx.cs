@@ -9,6 +9,7 @@ using System.IO;
 //using Excel = Microsoft.Office.Interop.Excel;
 using System.Web;
 using System.Globalization;
+using System.Linq;
 
 namespace TestGYApp.Presentation
 {
@@ -21,45 +22,52 @@ namespace TestGYApp.Presentation
         {
             //вставляем в пустой грид пустую таблицу с одной строкой
             //остальное будет прорисовано на клиенте
-            //DataTable clients = new DataTable();
             DataTable clients = new DataTable();
-            // clients. = GetClientsForExcel("", "", "", "", "", null, null, 1);
-            // GetClientsForExcel("", "", "", "", "", null, null, 1);
-
-            // clients.Rows.Add();
-            clients = GetClientsForExcel("", "", "", "", "", null, null, 7);
-
-
-       //     for (int i = 0; i < clients.Rows.Count; i++)
-    // MyClientsGridView.Columns[1].DataP .Data [0, i].Value = clients.Rows[i]["FirstName"]; //of use column index: ...Rows[i][0]; //0 is 1st column in table
-
-            MyClientsGridView.DataSource = GetClientsForExcel("", "", "", "", "", null, null, 7);
+         
+           // clients = GetClientsPageGrid("FullName asc", "", "", "", "", "", null, null, "", "",1);
+            MyClientsGridView.DataSource = GetClientsPageGrid("FullName asc", "", "", "", "", "", null, null, "", "", 1);
             MyClientsGridView.DataBind();
-           // MyClientsGridView.
-            
+
+            //string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex
         }
+
+        //для фильтрации
+        [WebMethod]
+        public static string GetClients(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, bool getAllItems)
+        {
+            return Business.ClientsManager.GetClients(sortOrder, searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize, getAllItems);
+        }
+                     
+
+
+        public static DataSet GetData(SqlCommand cmd, int pageIndex, string sortOrder, bool getAllItems)
+        {
+            return Business.ClientsManager.GetData(cmd, pageIndex, pageSize, sortOrder, getAllItems);
+        }
+
+
+        //универсализация эксперимент
 
         [WebMethod]
-        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex)
-        {     
-            return Business.ClientsManager.GetClients(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize);
-        }
-
-        public static DataSet GetData(SqlCommand cmd, int pageIndex)
+        public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex)
         {
-            return Business.ClientsManager.GetData(cmd, pageIndex, pageSize);
+            return Business.ClientsManager.GetClientsPageGrid( sortOrder,  searchTermName,  searchTermLastName,  searchTermPatronymic,  searchTermPhone,  searchTermMarketingInfo,  searchTermAgeFrom,  searchTermAgeTo,  searchTermBirthDateFrom,  searchTermBirthDateTo,  pageIndex,  pageSize);
         }
 
 
-        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, int pageIndex)
-        {
-            return Business.ClientsManager.GetClientsForExcel(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, pageIndex, pageSize);
+
+
+
+
+
+
+        //Получение таблицы с клиентами для Excel-отчета
+        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+        { 
+            return Business.ClientsManager.GetClientsForExcel( searchTermName,  searchTermLastName,  searchTermPatronymic,  searchTermPhone,  searchTermMarketingInfo,  searchTermAgeFrom,   searchTermAgeTo,  searchTermBirthDateFrom,  searchTermBirthDateTo);
         }
 
-        public static DataTable GetDataForExcel(SqlCommand cmd, int pageIndex)
-        {
-            return Business.ClientsManager.GetDataForExcel(cmd, pageIndex, pageSize);
-        }
+     
 
 
 
@@ -93,128 +101,36 @@ namespace TestGYApp.Presentation
            this.GetType(), "OpenWindow", "window.open('/ClientDispForm.aspx','_self');", true);
         }
 
+
+        public  void Test() {
+            FirstNameFilterTextBox.Text = "123";
+
+
+        }
+
+
+
         protected void ReportButton_Click(object sender, ImageClickEventArgs e)
         {
+           // CheckedItemsCollector.Text = "123";
 
+            string CheckedItems = CheckedItemsCollector.Text;
 
-            /*
-            Response.Clear();
-            Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment;filename=GridViewExport.xls");
-            Response.Charset = "";
-            Response.ContentType = "application/vnd.ms-excel";
-            // Response.ContentEncoding = Encoding.UTF8;
-            Response.ContentEncoding = System.Text.Encoding.Unicode;
-            Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
-            using (StringWriter sw = new StringWriter())
-            {
-                HtmlTextWriter hw = new HtmlTextWriter(sw);
-
-                //экспорт всех страниц
-                MyClientsGridView.AllowPaging = false;
-                this.BindGYDataRow();
-
-                MyClientsGridView.HeaderRow.BackColor = Color.White;
-                foreach (TableCell cell in MyClientsGridView.HeaderRow.Cells)
+            if (CheckedItems == "")
                 {
-                    cell.BackColor = System.Drawing.ColorTranslator.FromHtml("#490b41");
-                    cell.ForeColor = System.Drawing.Color.White;
-                    //    System.Drawing.Color["0,23, 123, 123"];
 
-                    //["#490b41"];
-                }
-                foreach (GridViewRow row in MyClientsGridView.Rows)
-                {
-                    row.BackColor = Color.White;
-                    foreach (TableCell cell in row.Cells)
-                    {
-                        if (row.RowIndex % 2 == 0)
-                        {
-                            // cell.BackColor = MyClientsGridView.AlternatingRowStyle.BackColor;
-                            cell.BackColor = System.Drawing.Color.White;
+                return;
 
-                        }
-                        else
-                        {
-                            //cell.BackColor = MyClientsGridView.RowStyle.BackColor;
-                            cell.BackColor = System.Drawing.ColorTranslator.FromHtml("#edcee9");
-
-                        }
-                        cell.CssClass = "textmode";
-                    }
-                }
-
-                MyClientsGridView.RenderControl(hw);
-
-                //style to format numbers to string
-                string style = @"<style> .textmode { mso-number-format:\@; } </style>";
-                Response.Write(style);
-                Response.Output.Write(sw.ToString());
-                Response.Flush();
-                Response.End();
             }
-            */
 
 
+            int[] nums = Array.ConvertAll(CheckedItems.Split(','), int.Parse);
 
-            /*
-            
-            DataTable dt = GetClientsForExcel("", "", "", "", "", null, null, 1); 
-            
-            Response.Clear();
-            Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment;filename=GridViewExport.xls");
-            Response.Charset = "";
-            Response.ContentType = "application/vnd.ms-excel";
-            // Response.ContentEncoding = Encoding.UTF8;
-            Response.ContentEncoding = System.Text.Encoding.Unicode;
-            Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
-
-
-
-
-            //style to format numbers to string
-            string style = @"<style> .textmode { mso-number-format:\@; } </style>";
-            // Response.Write(style);
-            // Response.Output.Write(sw.ToString());
-
-            TableHeaderCell hcell = new TableHeaderCell();
-            hcell.BackColor = System.Drawing.ColorTranslator.FromHtml("#490b41");
-           
-          
-
-            string tab = "";
-
-            foreach (DataColumn dc in dt.Columns)
-            {
-                Response.Write(tab + dc.ColumnName);
-                tab = "\t";
-                
-            }
-            Response.Write("\n");
-            int i;
-            foreach (DataRow dr in dt.Rows)
-            {
-                tab = "";
-                for (i = 0; i < dt.Columns.Count; i++)
-                {
-                    Response.Write(tab + dr[i].ToString());
-                    tab = "\t";
-                }
-                Response.Write("\n");
-            }
 
            
+           ExporttoExcel(nums);
 
-
-            //  Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-           // Response.End();
-
-            */
-
-            ExporttoExcel();
+    
 
 
         }
@@ -291,48 +207,41 @@ namespace TestGYApp.Presentation
         //}
 
 
+        public class CheckedItem {
+            public string itemId { get; set; }
+
+        }
 
 
-        private void ExporttoExcel()
+
+        [WebMethod]
+        //public static void WebExporttoExcel(CheckedItem[] CheckedItemArray)
+
+        public static void WebExporttoExcel(string[] test)
+        {
+            TestPage instance = new TestPage();
+            //instance.ExporttoExcel();
+        }
+
+
+
+
+      //  [WebMethod]
+        protected  void ExporttoExcel(int[] nums)
         {
 
-            //Response.Clear();
-            //Response.Buffer = true;
-            //Response.AddHeader("content-disposition", "attachment;filename=GridViewExport.xls");
-            //Response.Charset = "";
-            //Response.ContentType = "application/vnd.ms-excel";
-            //// Response.ContentEncoding = Encoding.UTF8;
-            //Response.ContentEncoding = System.Text.Encoding.Unicode;
-            //Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
-
+            
 
             HttpContext.Current.Response.Clear();
-           // HttpContext.Current.Response.ClearContent();
-           // HttpContext.Current.Response.ClearHeaders();
             HttpContext.Current.Response.Buffer = true;
             HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=Reports.xls");
             HttpContext.Current.Response.Charset = "";
             HttpContext.Current.Response.ContentType = "application/ms-excel";
-            Response.ContentEncoding = System.Text.Encoding.Unicode;
-            Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
+            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.Unicode;
+            HttpContext.Current.Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
             HttpContext.Current.Response.Write(@"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.0 Transitional//EN"">");
 
 
-//            HttpContext.Current.Response.Write(@"<style rel=""stylesheet"" type=""text / css"">
-
-//th {
-//                background-color: #490b41;
-//        color: #FFF;
-//        font-weight: bold;
-//}
-
-
-
-//</ style > ");
-
-
-            // HttpContext.Current.Response.Charset = "utf-8";
-            //HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("windows-1250");
        
             HttpContext.Current.Response.Write("<font style='font-size:10.0pt; font-family:Calibri;'>");
             HttpContext.Current.Response.Write("<BR><BR><BR>");
@@ -340,8 +249,11 @@ namespace TestGYApp.Presentation
             HttpContext.Current.Response.Write("<Table border='1' bgColor='#ffffff' " +
               "borderColor='#000000' cellSpacing='0' cellPadding='0' " +
               "style='font-size:10.0pt; font-family:Calibri; background:white;'> <TR>");
-         
-            int columnscount = MyClientsGridView.Columns.Count;
+
+     
+
+            int columnscount = MyClientsGridView.Columns.Count; 
+           // int columnscount = 7;
 
             for (int j = 0; j < columnscount; j++)
             {   
@@ -350,7 +262,9 @@ namespace TestGYApp.Presentation
                 HttpContext.Current.Response.Write("<B>");
 
                 HttpContext.Current.Response.Write(@"<font color=""white"">");
-                HttpContext.Current.Response.Write(MyClientsGridView.Columns[j].HeaderText.ToString());
+              HttpContext.Current.Response.Write(MyClientsGridView.Columns[j].HeaderText.ToString());
+                            
+
                 HttpContext.Current.Response.Write(@"</font>");
 
                 HttpContext.Current.Response.Write("</B>");
@@ -359,30 +273,58 @@ namespace TestGYApp.Presentation
             HttpContext.Current.Response.Write("</TR>");
 
             DataTable clients = new DataTable();    
-            clients = GetClientsForExcel("", "", "", "", "", null, null, 7);
+            clients = GetClientsForExcel("", "", "", "", "", null, null, "", "");
+          //  string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo
 
 
 
             foreach (DataRow row in clients.Rows)
             {
-                HttpContext.Current.Response.Write("<TR>");
-                for (int i = 0; i < clients.Columns.Count; i++)
-                {
-                    HttpContext.Current.Response.Write("<Td>");
-                    HttpContext.Current.Response.Write(row[i].ToString());
-                    HttpContext.Current.Response.Write("</Td>");
-                }
+                //if (nums.Contains(row.Field<int>("ID")) )
+                //      {
+                //    HttpContext.Current.Response.Write("<TR>");
+                //    for (int i = 0; i < clients.Columns.Count; i++)
+                //    {
+                //        HttpContext.Current.Response.Write("<Td>");
+                //        HttpContext.Current.Response.Write(row[i].ToString());
+                //        HttpContext.Current.Response.Write("</Td>");
+                //    }
 
-                HttpContext.Current.Response.Write("</TR>");
+                //    HttpContext.Current.Response.Write("</TR>");
+
+                //}
+
+
+                
+                    HttpContext.Current.Response.Write("<TR>");
+                    for (int i = 0; i < clients.Columns.Count; i++)
+                    {
+                        HttpContext.Current.Response.Write("<Td>");
+                        HttpContext.Current.Response.Write(row[i].ToString());
+                        HttpContext.Current.Response.Write("</Td>");
+                    }
+
+                    HttpContext.Current.Response.Write("</TR>");
+
+               
+
+
+
             }
+
             HttpContext.Current.Response.Write("</Table>");
             HttpContext.Current.Response.Write("</font>");
             HttpContext.Current.Response.Flush();
             HttpContext.Current.Response.End();
         }
 
+        protected void SortTestButton_Click(object sender, ImageClickEventArgs e)
+        {
 
 
+
+
+        }
     }
 }
 

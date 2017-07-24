@@ -26,6 +26,8 @@
                     <script src="Scripts/ClientsBlockRestrictedCharacters.js"></script>
                     <%--Поведение фильтров:--%>
                     <script src="Scripts/ClientsFiltersBehavior.js"></script>
+                 
+
 
 
                      <%-- Date picker --%>
@@ -39,7 +41,9 @@
                     <%--<script src="Scripts/datejs.js"></script>--%>
                     <script src="Scripts/jquery.dateFormat-1.0.js"></script>
 
+                   
 
+                    <asp:TextBox ID="CheckedItemsCollector" runat="server" placeholder="My values..." Width="192px" Height="25px" Visible="true"></asp:TextBox>
 
                     Список клиентов<br />
                     <br />
@@ -120,40 +124,77 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="gridClients">
-                    <asp:ImageButton ID="AddClientButton" runat="server" ImageUrl="~/Images/AddButton.png" CssClass="AddClientButton" OnClick="AddClientButton_Click" Height="40px" />
-                    <asp:ImageButton ID="ClearFiltersButton" runat="server" ImageUrl="~/Images/filterTest.png" CssClass="AddClientButton" Height="40px" OnClientClick="return false" />                    
-                    <asp:ImageButton ID="ReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="AddClientButton" Height="40px" OnClick="ReportButton_Click" />
-                    
+                    <asp:ImageButton ID="AddClientButton" runat="server" ImageUrl="~/Images/AddButton.png" CssClass="FunctionalButton"  OnClick="AddClientButton_Click" Height="40px" />
+                    <asp:ImageButton ID="ClearFiltersButton" runat="server" ImageUrl="~/Images/filterTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false" /> 
+                    <asp:ImageButton ID="ServerReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="ReportButton_Click"  />                   
+                    <asp:ImageButton ID="ClientReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"   />
+                     <%--<asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"  />--%>
+                    <%--<asp:ImageButton ID="SortTestButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="SortTestButton_Click" />--%>
                 
 
                     <%--<asp:Image ID="testImg" runat="server" ImageUrl="~/Images/filterTest.png"  Height="40px" />--%>
                     
                 
 
-                    <asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False" >
+                    <asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False"  CssClass="MyClientsGridView"   >
                         <%--<asp:GridView ID="MyClientsGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="id" AllowPaging="false"  DataSourceID="ClientsSqlDataSource" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal" OnPageIndexChanging="MyClientsGridView_PageIndexChanging">--%>
                         <Columns>
-                            <asp:BoundField HeaderText="Имя" SortExpression="FullName">
+
+                          
+                                <asp:CheckBoxField ItemStyle-CssClass="CheckboxHeader" HeaderStyle-CssClass="CheckboxHeader">
+
+
+<ItemStyle CssClass="CheckboxField"></ItemStyle>
+                                </asp:CheckBoxField>
+
+
+                            <asp:BoundField HeaderText="Имя" SortExpression="FullName" HeaderStyle-CssClass="FullNameHeader">
+<HeaderStyle CssClass="FullNameHeader"></HeaderStyle>
+
                                 <ItemStyle Width="200px" CssClass="FullNameCol" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="Телефон" SortExpression="Phone">
+                            <asp:BoundField HeaderText="Телефон" SortExpression="Phone"  HeaderStyle-CssClass="PhoneHeader">
+<HeaderStyle CssClass="PhoneHeader"></HeaderStyle>
+
                                 <ItemStyle Width="120px" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="Дата рождения" SortExpression="BirthDate">
+                            <asp:BoundField HeaderText="Дата рождения" SortExpression="BirthDate"  HeaderStyle-CssClass="BirthDateHeader">
+<HeaderStyle CssClass="BirthDateHeader"></HeaderStyle>
+
                                 <ItemStyle Width="105px" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="Возраст" SortExpression="Age">
-                                <ItemStyle Width="70px" />
+                            <asp:BoundField HeaderText="Возраст" SortExpression="Age"  HeaderStyle-CssClass="AgeHeader">
+<HeaderStyle CssClass="AgeHeader"></HeaderStyle>
+
+                                <ItemStyle Width="90px" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="E-mail" SortExpression="Email">
+                            <asp:BoundField HeaderText="E-mail" SortExpression="Email"  HeaderStyle-CssClass="EmailHeader">
+<HeaderStyle CssClass="EmailHeader"></HeaderStyle>
+
                                 <ItemStyle Width="180px" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="Примечание" SortExpression="Comment">
-                                <ItemStyle Width="280px" />
+                            <asp:BoundField HeaderText="Примечание" SortExpression="Comment"  HeaderStyle-CssClass="CommentHeader">
+<HeaderStyle CssClass="CommentHeader"></HeaderStyle>
+
+                                <ItemStyle Width="275px" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="Откуда узнал о клубе" SortExpression="MarketingInfo">
-                                <ItemStyle Width="215px" />
+                            <asp:BoundField HeaderText="Откуда узнал о клубе" SortExpression="MarketingInfo"  HeaderStyle-CssClass="MarketingInfoHeader">
+<HeaderStyle CssClass="MarketingInfoHeader"></HeaderStyle>
+
+                                <ItemStyle Width="200px" />
                             </asp:BoundField>
+
+
+
+                        
+
+
+
+                               
+
+
+
+                        
 
 
 

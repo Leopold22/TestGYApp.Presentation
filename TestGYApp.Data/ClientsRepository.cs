@@ -97,8 +97,8 @@ namespace TestGYApp.Data
         }
 
 
-
-        public static string GetClients(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
+        // текущая реализация фильтрации
+        public static string GetClients(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize, bool getAllItems)
 
             
         {
@@ -117,10 +117,10 @@ namespace TestGYApp.Data
             cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
             cmd.Parameters.AddWithValue("@PageSize", pageSize);
             cmd.Parameters.Add("@RecordCount", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
-            return GetData(cmd, pageIndex, pageSize).GetXml(); 
+            return GetData(cmd, pageIndex, pageSize, sortOrder, getAllItems).GetXml(); 
         }
 
-        public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize)
+        public static DataSet GetData(SqlCommand cmd, int pageIndex, int pageSize, string sortOrder, bool getAllItems)
         {
             string gyConnString = ConfigurationManager.ConnectionStrings["GY_ContentConnectionString"].ConnectionString;
             using (SqlConnection gyCon = new SqlConnection(gyConnString))
@@ -131,16 +131,68 @@ namespace TestGYApp.Data
                     sda.SelectCommand = cmd;
                     using (DataSet ds = new DataSet())
                     {
-                        sda.Fill(ds, "Clients");
-                        DataTable dt = new DataTable("Pager");
-                        dt.Columns.Add("PageIndex");
-                        dt.Columns.Add("PageSize");
-                        dt.Columns.Add("RecordCount");
-                        dt.Rows.Add();
-                        dt.Rows[0]["PageIndex"] = pageIndex;
-                        dt.Rows[0]["PageSize"] = pageSize;
-                        dt.Rows[0]["RecordCount"] = cmd.Parameters["@RecordCount"].Value;
-                        ds.Tables.Add(dt);
+                        int startRecord = (pageIndex - 1) * pageSize + 1; //порядковый номер первой записи
+                        int endRecord = (((pageIndex - 1) * pageSize + 1) + pageSize) - 1; //порядковый номер последней записи
+                        DataTable clients = new DataTable();
+                        sda.Fill(clients);  //заполнили таблицу clients выборкой, которую возвращает хранимая процедура       
+
+                        //сортировка
+                        DataView dvClients = new DataView();
+                        dvClients = clients.AsDataView();
+                        dvClients.Sort = sortOrder; // "FullName asc";
+                        clients = dvClients.ToTable("Clients");
+
+
+                        if (getAllItems)
+                        {
+                           // int clientsColumnsCount = clients.Columns.Count;
+                            for (int i = clients.Columns.Count - 1; i >= 0; i--)
+                            {
+                                if (clients.Columns[i].ColumnName != "ID")
+                                {
+                                    clients.Columns.RemoveAt(i);
+                                }
+                            }
+
+
+                            ds.Tables.Add(clients);
+                            
+                        }
+                        else {
+                            //заполняем результирующую таблицу данными для конкретной страницы
+                            DataTable clientsCurrentPage = clients.Clone(); //копируем таблицу clients без содержимого
+
+                            //заполняем clientsCurrentPage записями из clients, которые попадают в интервал строк для текущей страницы 
+                            for (int i = startRecord - 1; i <= endRecord - 1; i++)
+                            {
+                                if (i > clients.Rows.Count - 1) { break; };
+
+
+                                var desRow = clientsCurrentPage.NewRow();
+                                var sourceRow = clients.Rows[i];
+                                desRow.ItemArray = sourceRow.ItemArray.Clone() as object[];
+                                clientsCurrentPage.Rows.Add(desRow);
+
+                            }
+
+
+                            ds.Tables.Add(clientsCurrentPage); //добавили clientsCurrentPage в датасет
+
+                            // добавляем пейджер
+                            DataTable dt = new DataTable("Pager");
+                            dt.Columns.Add("PageIndex");
+                            dt.Columns.Add("PageSize");
+                            dt.Columns.Add("RecordCount");
+                            dt.Rows.Add();
+                            dt.Rows[0]["PageIndex"] = pageIndex;
+                            dt.Rows[0]["PageSize"] = pageSize;
+                            dt.Rows[0]["RecordCount"] = cmd.Parameters["@RecordCount"].Value;
+                            ds.Tables.Add(dt);
+                        }
+                        
+
+                        //  sda.Fill(ds, "Clients");
+
                         return ds;
                     }
 
@@ -151,15 +203,79 @@ namespace TestGYApp.Data
 
 
 
-        //Excel эксперимент
+        //универсализация
 
-
-        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, int pageIndex, int pageSize)
-
-
+        public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize )
         {
             
-            string query = "[GetClients_ReportPager]";
+            using (DataSet ds = new DataSet())
+            {
+                int startRecord = (pageIndex - 1) * pageSize + 1; //порядковый номер первой записи
+                int endRecord = (((pageIndex - 1) * pageSize + 1) + pageSize) - 1; //порядковый номер последней записи
+
+                //заполнили таблицу clients выборкой, которую возвращает GetFilteredClientsTable
+                DataTable clients = new DataTable();
+                clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
+
+
+                //DataTable clients = new DataTable();
+                //sda.Fill(clients);  //заполнили таблицу clients выборкой, которую возвращает хранимая процедура       
+
+                //сортировка
+                DataView dvClients = new DataView();
+                dvClients = clients.AsDataView();
+                dvClients.Sort = sortOrder; // "FullName asc";
+                clients = dvClients.ToTable("Clients");
+
+
+                //заполняем результирующую таблицу данными для конкретной страницы
+                DataTable clientsCurrentPage = clients.Clone(); //копируем таблицу clients без содержимого
+
+                //заполняем clientsCurrentPage записями из clients, которые попадают в интервал строк для текущей страницы 
+                for (int i = startRecord - 1; i <= endRecord - 1; i++)
+                {
+                    if (i > clients.Rows.Count - 1) { break; };
+
+
+                    var desRow = clientsCurrentPage.NewRow();
+                    var sourceRow = clients.Rows[i];
+                    desRow.ItemArray = sourceRow.ItemArray.Clone() as object[];
+                    clientsCurrentPage.Rows.Add(desRow);
+
+                }
+
+
+                ds.Tables.Add(clientsCurrentPage); //добавили clientsCurrentPage в датасет
+
+                // добавляем пейджер
+                DataTable dt = new DataTable("Pager");
+                dt.Columns.Add("PageIndex");
+                dt.Columns.Add("PageSize");
+                dt.Columns.Add("RecordCount");
+                dt.Rows.Add();
+                dt.Rows[0]["PageIndex"] = pageIndex;
+                dt.Rows[0]["PageSize"] = pageSize;
+                //dt.Rows[0]["RecordCount"] = cmd.Parameters["@RecordCount"].Value;
+                int recordCount = clients.Rows.Count;
+                dt.Rows[0]["RecordCount"] = recordCount;
+                ds.Tables.Add(dt);
+
+
+                return ds.GetXml();
+            }
+
+            
+
+
+        }
+
+
+
+            //получение отфильтрованной таблицы Clients (базовый метод для фильтрации, вызова excel-отчета и получения списка ID при клике на общий чекбокс)
+            public static DataTable GetFilteredClientsTable(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+        {
+
+            string query = "[GetClients_Pager]";
             SqlCommand cmd = new SqlCommand(query);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@SearchTermName", searchTermName);
@@ -169,11 +285,170 @@ namespace TestGYApp.Data
             cmd.Parameters.AddWithValue("@SearchTermMarketingInfo", searchTermMarketingInfo);
             cmd.Parameters.AddWithValue("@AgeFrom", searchTermAgeFrom);
             cmd.Parameters.AddWithValue("@AgeTo", searchTermAgeTo);
-            cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
-            cmd.Parameters.AddWithValue("@PageSize", pageSize);
+            cmd.Parameters.AddWithValue("@BirthDateFrom", searchTermBirthDateFrom);
+            cmd.Parameters.AddWithValue("@BirthDateTo", searchTermBirthDateTo);
+            //cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
+            //cmd.Parameters.AddWithValue("@PageSize", pageSize);
             cmd.Parameters.Add("@RecordCount", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
-            return GetDataForExcel(cmd, pageIndex, pageSize);
+           // return GetData(cmd, pageIndex, pageSize, sortOrder, getAllItems).GetXml();
+
+
+            string gyConnString = ConfigurationManager.ConnectionStrings["GY_ContentConnectionString"].ConnectionString;
+            using (SqlConnection gyCon = new SqlConnection(gyConnString))
+            {
+                using (SqlDataAdapter sda = new SqlDataAdapter())
+                {
+                    cmd.Connection = gyCon;
+                    sda.SelectCommand = cmd;
+                    using (DataSet ds = new DataSet())
+                    {
+                        //int startRecord = (pageIndex - 1) * pageSize + 1; //порядковый номер первой записи
+                        //int endRecord = (((pageIndex - 1) * pageSize + 1) + pageSize) - 1; //порядковый номер последней записи
+                        DataTable clients = new DataTable();
+                        sda.Fill(clients);  //заполнили таблицу clients выборкой, которую возвращает хранимая процедура       
+
+                        ////сортировка - перенести в фильтрацию
+                        //DataView dvClients = new DataView();
+                        //dvClients = clients.AsDataView();
+                        //dvClients.Sort = sortOrder; // "FullName asc";
+                        //clients = dvClients.ToTable("Clients");
+
+
+                        //if (getAllItems)
+                        //{
+                        //    // int clientsColumnsCount = clients.Columns.Count;
+                        //    for (int i = clients.Columns.Count - 1; i >= 0; i--)
+                        //    {
+                        //        if (clients.Columns[i].ColumnName != "ID")
+                        //        {
+                        //            clients.Columns.RemoveAt(i);
+                        //        }
+                        //    }
+
+
+                        //    ds.Tables.Add(clients);
+
+                        //}
+                        //else
+                        //{
+                        //    //заполняем результирующую таблицу данными для конкретной страницы
+                        //    DataTable clientsCurrentPage = clients.Clone(); //копируем таблицу clients без содержимого
+
+                        //    //заполняем clientsCurrentPage записями из clients, которые попадают в интервал строк для текущей страницы 
+                        //    for (int i = startRecord - 1; i <= endRecord - 1; i++)
+                        //    {
+                        //        if (i > clients.Rows.Count - 1) { break; };
+
+
+                        //        var desRow = clientsCurrentPage.NewRow();
+                        //        var sourceRow = clients.Rows[i];
+                        //        desRow.ItemArray = sourceRow.ItemArray.Clone() as object[];
+                        //        clientsCurrentPage.Rows.Add(desRow);
+
+                        //    }
+
+
+                        //    ds.Tables.Add(clientsCurrentPage); //добавили clientsCurrentPage в датасет
+
+                        //    // добавляем пейджер
+                        //    DataTable dt = new DataTable("Pager");
+                        //    dt.Columns.Add("PageIndex");
+                        //    dt.Columns.Add("PageSize");
+                        //    dt.Columns.Add("RecordCount");
+                        //    dt.Rows.Add();
+                        //    dt.Rows[0]["PageIndex"] = pageIndex;
+                        //    dt.Rows[0]["PageSize"] = pageSize;
+                        //    dt.Rows[0]["RecordCount"] = cmd.Parameters["@RecordCount"].Value;
+                        //    ds.Tables.Add(dt);
+                        //}
+
+
+                        //  sda.Fill(ds, "Clients");
+
+                        return clients;
+                    }
+
+                }
+            }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+        //Получение таблицы с клиентами для Excel-отчета
+        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+
+
+        {
+            //получили полную таблицу Clients с учетом фильтров
+            DataTable clients = new DataTable();
+            clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
+
+
+            // УБИРАЕМ ЛИШНИЕ КОЛОНКИ
+
+
+            //исходный набор колонок
+            string[] columnNames = (from clientColumn in clients.Columns.Cast<DataColumn>()
+                                    select clientColumn.ColumnName).ToArray();
+
+            //колонки, которые должны присутствовать в отчете
+             string[] reportColumns = new string[] { "FullName", "Email", "Age" };
+
+
+            
+       
+            
+
+
+            //перебираем существующие колонки и удаляем лишние
+
+            //foreach (DataColumn column in clients.Columns)
+            //{
+            //    int columnPosition = Array.IndexOf(reportColumns, column.ColumnName);
+            //    if  (columnPosition == -1) { clients.Columns.Remove(column.ColumnName); }
+            //}
+
+            List<DataColumn> columnsToRemove = new List<DataColumn> { };
+
+            foreach (DataColumn column in clients.Columns)
+            {
+                int columnPosition = Array.IndexOf(reportColumns, column.ColumnName);
+                if (columnPosition == -1) {
+                    //clients.Columns.Remove(column.ColumnName);
+                    columnsToRemove.Add(column);
+                }
+            }
+
+
+
+            clients.Columns.Cast<DataColumn>().ToList().RemoveAll(item => columnsToRemove.Contains(item));
+            //RemoveAll(item => itemsToDoSomething.Contains(item));
+
+
+            return clients;
+
+
+            }
 
 
 
@@ -198,6 +473,10 @@ namespace TestGYApp.Data
                         dt.Rows[0]["PageSize"] = pageSize;
                         dt.Rows[0]["RecordCount"] = cmd.Parameters["@RecordCount"].Value;
                         ds.Tables.Add(dt);
+
+
+                      
+
                        
                         return ds.Tables["Clients"];
                     }

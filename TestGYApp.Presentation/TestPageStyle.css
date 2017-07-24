@@ -23,6 +23,17 @@ table {
         border-color: #ccc;
     }
 
+.FullNameHeader a {
+    color: white;
+}
+
+.FullNameHeader a:hover {
+    text-decoration: underline !important;
+}
+
+ 
+
+
     table tr:nth-child(odd) {
         background-color: #edcee9
     }
@@ -99,7 +110,7 @@ align-items: center;
       opacity: 0.7;
     }
 
-.AddClientButton:hover {
+.FunctionalButton:hover {
     background-image: url('~/Images/AddButton-hover.png')
 }
 

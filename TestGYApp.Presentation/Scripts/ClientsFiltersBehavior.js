@@ -138,18 +138,47 @@ $('span.BirthDateOuterFilterSpan').live("blur", function () {
 });
 
 
-//!!! выставляем заново фокус в двойной фильтр при клике на неактивную область календаря
-$("[id=ui-datepicker-div]").live("click", function () {
-    $("[id*=BirthDateFromFilterTextBox]").focus();
 
-    var ndate = $("[id*=BirthDateFromFilterTextBox]").val();
-    var myDate = $.format.date(ndate, "yyyy-mm-dd hh:mm:ss");
-  // var myDate = new Date(ndate).format.toString('yyyy-mm-dd hh:mm:ss');
-  // myDate.format('yyyy-mm-dd hh:mm:ss');
- // alert($.format.date(ndate, "yyyy-mm-dd hh:mm:ss"));
+//контролируем поведение при клике на неактивную область дейтпикера 
+(function () {
 
-    //alert($("[id*=BirthDateFromFilterTextBox]").val((new Date()).toString('dd.M.yy')).toString());
-});
+   
+    var prevFocus; //сюда записываем, в какое поле выставлен фокус
+
+    $("[id*=BirthDateFromFilterTextBox]").live("click", function () {
+        prevFocus = "datefrom";    
+    });
+
+    $("[id*=BirthDateToFilterTextBox]").live("click", function () {
+        prevFocus = "dateto"; 
+    });
+
+    //при клике на неактивную область дейтпикера возвращаем фокус в то поле, откуда он был вызван
+    //$("[id=ui-datepicker-div]").live("click", function () {
+    $('.ui-datepicker-calendar').live('click', function () {
+        //ui-datepicker-calendar
+
+        //if ($("[.ui-datepicker-title]").is(':click') == true) {
+        //    alert("omg!");
+        //}
+      //  alert("yeah baby");
+       
+        if (prevFocus == "datefrom")
+        {
+            $("[id*=BirthDateFromFilterTextBox]").focus();
+        }
+
+        if (prevFocus == "dateto") {
+            $("[id*=BirthDateToFilterTextBox]").focus();
+        }        
+
+    });
+
+
+})();
+
+
+
 
 
 

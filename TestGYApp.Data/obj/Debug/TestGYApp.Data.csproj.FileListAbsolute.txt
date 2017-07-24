@@ -58,3 +58,15 @@ C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYAp
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Data\obj\Debug\TestGYApp.Data.csprojResolveAssemblyReference.cache
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Data\obj\Debug\TestGYApp.Data.dll
 C:\Users\1\Documents\Visual Studio 2015\Projects\TestGYApp.Presentation\TestGYApp.Data\obj\Debug\TestGYApp.Data.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\TestGYApp.Data.dll.config
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\TestGYApp.Data.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\TestGYApp.Data.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\EntityFramework.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\TestGYApp.DTO.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\TestGYApp.DTO.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\EntityFramework.xml
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\obj\Debug\TestGYApp.Data.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\obj\Debug\TestGYApp.Data.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\TestGYApp.Presentation\TestGYApp.Data\obj\Debug\TestGYApp.Data.pdb

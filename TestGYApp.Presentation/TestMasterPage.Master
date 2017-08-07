@@ -41,7 +41,7 @@
                         </div>
                         <div class="collapse navbar-collapse" id="responsive-menu"  >
                             <ul class="nav navbar-nav" >
-                                <li><a href="#">Ссылка1</a></li>
+                                <li><a href="/SettingsPage.aspx">Настройки</a></li>
                                 <li><a href="#">Ссылка2</a></li>
                                 <li><a href="#">Ссылка3</a></li>
                                 <li><a href="#">Ссылка4</a></li>                                

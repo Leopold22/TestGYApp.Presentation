@@ -250,10 +250,12 @@ namespace TestGYApp.Presentation
               "borderColor='#000000' cellSpacing='0' cellPadding='0' " +
               "style='font-size:10.0pt; font-family:Calibri; background:white;'> <TR>");
 
-     
+            DataTable clients = new DataTable();
+            clients = GetClientsForExcel("", "", "", "", "", null, null, null, null);
 
-            int columnscount = MyClientsGridView.Columns.Count; 
-           // int columnscount = 7;
+          //  int columnscount = MyClientsGridView.Columns.Count;
+            int columnscount = clients.Columns.Count; 
+            // int columnscount = 7;
 
             for (int j = 0; j < columnscount; j++)
             {   
@@ -262,7 +264,7 @@ namespace TestGYApp.Presentation
                 HttpContext.Current.Response.Write("<B>");
 
                 HttpContext.Current.Response.Write(@"<font color=""white"">");
-              HttpContext.Current.Response.Write(MyClientsGridView.Columns[j].HeaderText.ToString());
+                HttpContext.Current.Response.Write(clients.Columns[j].ColumnName.ToString());
                             
 
                 HttpContext.Current.Response.Write(@"</font>");
@@ -272,8 +274,7 @@ namespace TestGYApp.Presentation
             }
             HttpContext.Current.Response.Write("</TR>");
 
-            DataTable clients = new DataTable();    
-            clients = GetClientsForExcel("", "", "", "", "", null, null, "", "");
+           
           //  string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo
 
 

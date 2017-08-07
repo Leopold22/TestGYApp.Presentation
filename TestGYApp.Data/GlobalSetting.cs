@@ -15,29 +15,16 @@ namespace TestGYApp.Data
 using System;
     using System.Collections.Generic;
     
-public partial class MarketingInfoChoice
+public partial class GlobalSetting
 {
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public MarketingInfoChoice()
-    {
-
-        this.Clients = new HashSet<Clients>();
-
-    }
-
 
     public int ID { get; set; }
 
-    public string Name { get; set; }
+    public string SystemName { get; set; }
 
-    public Nullable<bool> Deleted { get; set; }
+    public string Description { get; set; }
 
-
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Clients> Clients { get; set; }
+    public string Value { get; set; }
 
 }
 

@@ -10,16 +10,13 @@ using System.Drawing;
 using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-
-
-
+using System.Xml.Linq;
 
 namespace TestGYApp.Data
 {
     public class ClientsRepository
     {
-
+        // Получение коллекции посетителей
         public static List<DTO.Client> GetClients()
         {
             GY_ContentEntitiesMain db = new GY_ContentEntitiesMain();
@@ -78,7 +75,7 @@ namespace TestGYApp.Data
 
         }
 
-        public static void UpdateClient(int clientID, string firstName, string lastName, string patronymic)
+        public static void UpdateClient(int clientID, string firstName, string lastName, string patronymic, string email)
         {
             GY_ContentEntitiesMain db = new GY_ContentEntitiesMain();
 
@@ -92,7 +89,10 @@ namespace TestGYApp.Data
                 client.LastName = lastName.Trim();
                 client.Patronymic = patronymic.Trim();
                 client.cl_name = lastName.Trim()  + ' ' + firstName.Trim()  + ' ' +  patronymic.Trim() ;
+                client.Email = email;
             }
+
+
             db.SaveChanges();
         }
 
@@ -415,34 +415,55 @@ namespace TestGYApp.Data
              string[] reportColumns = new string[] { "FullName", "Email", "Age" };
 
 
-            
-       
-            
+            string reportSettingValue = SettingsRepository.GetGlobalSettingValue("ClientsReport");
 
 
-            //перебираем существующие колонки и удаляем лишние
+            // получаем объект настроек
+            var  reportSetting = XDocument.Parse(reportSettingValue);
+
+            var reportSettingColumns = (from r in reportSetting.Root.Elements("column")
+                         select new DTO.ReportSettingColumn()
+                         {
+                             Name = (string)r.Element("name"),
+                             DispName = (string)r.Element("dispName"),
+                             Order = (int)r.Element("order")
+                         }).ToList();
+
+
+
+            DataTable excelClients = clients.Clone();
+
+
+            for (int i = 1; i <= reportSettingColumns.Count(); i++)
+            {
+                DTO.ReportSettingColumn repColumn = reportSettingColumns.Find(item => item.Order == i);
+                string name = repColumn.Name;
+                string dispName = repColumn.DispName;
+
+
+             //   excelClients
+
+            }
+
+
+            ////удаляем лишние колонки
+            //List<DataColumn> columnsToRemove = new List<DataColumn> { };
 
             //foreach (DataColumn column in clients.Columns)
             //{
             //    int columnPosition = Array.IndexOf(reportColumns, column.ColumnName);
-            //    if  (columnPosition == -1) { clients.Columns.Remove(column.ColumnName); }
+            //    if (columnPosition == -1) {
+            //       columnsToRemove.Add(column);
+            //    }
             //}
 
-            List<DataColumn> columnsToRemove = new List<DataColumn> { };
+            
+            //foreach (DataColumn column in columnsToRemove)
+            //{
+            //    clients.Columns.Remove(column.ColumnName);
+            //}
 
-            foreach (DataColumn column in clients.Columns)
-            {
-                int columnPosition = Array.IndexOf(reportColumns, column.ColumnName);
-                if (columnPosition == -1) {
-                    //clients.Columns.Remove(column.ColumnName);
-                    columnsToRemove.Add(column);
-                }
-            }
-
-
-
-            clients.Columns.Cast<DataColumn>().ToList().RemoveAll(item => columnsToRemove.Contains(item));
-            //RemoveAll(item => itemsToDoSomething.Contains(item));
+   
 
 
             return clients;

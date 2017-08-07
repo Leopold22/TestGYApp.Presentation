@@ -24,9 +24,9 @@ namespace TestGYApp.Business
         }
 
 
-        public static void UpdateClient(int clientID, string firstName, string lastName, string patronymic)
+        public static void UpdateClient(int clientID, string firstName, string lastName, string patronymic, string email)
         {
-            Data.ClientsRepository.UpdateClient(clientID, firstName, lastName, patronymic);
+            Data.ClientsRepository.UpdateClient(clientID, firstName, lastName, patronymic, email);
         }
 
         //получение элементов списка (всех, либо для конкретной страницы)

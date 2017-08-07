@@ -5,10 +5,10 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FullName" Type="String" MaxLength="105" FixedLength="true" Unicode="true" />
-    <Property Name="LastName" Type="String" MaxLength="35" FixedLength="true" Unicode="true" />
-    <Property Name="FirstName" Type="String" MaxLength="35" FixedLength="true" Unicode="true" />
-    <Property Name="Patronymic" Type="String" MaxLength="35" FixedLength="true" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="105" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="BirthDate" Type="DateTime" Precision="0" />
     <Property Name="Age" Type="Int16" />
     <Property Name="IsChild" Type="Boolean" />
@@ -29,6 +29,7 @@
       <End Role="MarketingInfoChoice" EntitySet="MarketingInfoChoice" />
       <End Role="Clients" EntitySet="Clients" />
     </AssociationSet>
+    <EntitySet Name="tbl_GlobalSettings" EntityType="GY_ContentModelClients.GlobalSetting" />
   </EntityContainer>
   <EntityType Name="MarketingInfoChoice">
     <Key>
@@ -51,4 +52,13 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="GlobalSetting">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="SystemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="900" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

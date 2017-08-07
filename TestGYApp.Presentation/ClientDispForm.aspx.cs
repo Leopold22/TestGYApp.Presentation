@@ -15,18 +15,22 @@ namespace TestGYApp.Presentation
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Request.QueryString["id"] != null)
+            if (!Page.IsPostBack)
             {
-                int clientID = int.Parse(Request.QueryString["id"]);
-                var clients = Business.ClientsManager.GetClients();
 
-                NameTextBox.Text = clients.Find(item => item.ID == clientID).FirstName;
-                LastNameTextBox.Text = clients.Find(item => item.ID == clientID).LastName;
-                PatronymicTextBox.Text = clients.Find(item => item.ID == clientID).Patronymic;
-                PhoneTextBox.Text = clients.Find(item => item.ID == clientID).Phone;
-                BirthDateTextBox.Text = clients.Find(item => item.ID == clientID).BirthDate.ToString();
-                EmailTextBox.Text = clients.Find(item => item.ID == clientID).Email;
-                CommentTextBox.Text = clients.Find(item => item.ID == clientID).Comment;
+                if (Request.QueryString["id"] != null)
+                {
+                    int clientID = int.Parse(Request.QueryString["id"]);
+                    var clients = Business.ClientsManager.GetClients();
+
+                    NameTextBox.Text = clients.Find(item => item.ID == clientID).FirstName;
+                    LastNameTextBox.Text = clients.Find(item => item.ID == clientID).LastName;
+                    PatronymicTextBox.Text = clients.Find(item => item.ID == clientID).Patronymic;
+                    PhoneTextBox.Text = clients.Find(item => item.ID == clientID).Phone;
+                    BirthDateTextBox.Text = clients.Find(item => item.ID == clientID).BirthDate.ToString();
+                    EmailTextBox.Text = clients.Find(item => item.ID == clientID).Email;
+                    CommentTextBox.Text = clients.Find(item => item.ID == clientID).Comment;
+                }
             }
         }
 
@@ -44,9 +48,10 @@ namespace TestGYApp.Presentation
 
                 string firstName = NameTextBox.Text;
                 string lastName = LastNameTextBox.Text;
-                string patronymic = PatronymicTextBox.Text; 
+                string patronymic = PatronymicTextBox.Text;
+                string email = EmailTextBox.Text;
 
-                Business.ClientsManager.UpdateClient(clientID, firstName, lastName, patronymic);
+                Business.ClientsManager.UpdateClient(clientID, firstName, lastName, patronymic, email);
 
 
             }

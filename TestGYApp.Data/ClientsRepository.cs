@@ -421,8 +421,9 @@ namespace TestGYApp.Data
             // получаем объект настроек
             var  reportSetting = XDocument.Parse(reportSettingValue);
 
+           
             var reportSettingColumns = (from r in reportSetting.Root.Elements("column")
-                         select new DTO.ReportSettingColumn()
+                                        select new DTO.ReportSettingColumn()
                          {
                              Name = (string)r.Element("name"),
                              DispName = (string)r.Element("dispName"),
@@ -441,9 +442,23 @@ namespace TestGYApp.Data
                 string dispName = repColumn.DispName;
 
 
+                if (clients.Columns.Contains(name))
+                {
+                    clients.Columns[name].SetOrdinal(i-1);
+                    clients.Columns[name].ColumnName = dispName;
+                }
+
              //   excelClients
 
             }
+
+            int clientsColumnsCount = clients.Columns.Count;
+
+            for (int i = clientsColumnsCount; i > reportSettingColumns.Count(); i--)
+            {
+                clients.Columns.RemoveAt(i-1);
+            }
+            
 
 
             ////удаляем лишние колонки

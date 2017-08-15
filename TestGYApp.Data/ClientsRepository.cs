@@ -205,7 +205,8 @@ namespace TestGYApp.Data
 
         //универсализация
 
-        public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize )
+        //public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize )
+        public static string GetClientsPageGrid(DTO.ClientFilterObject filters, int pageIndex, int pageSize )
         {
             
             using (DataSet ds = new DataSet())
@@ -215,7 +216,7 @@ namespace TestGYApp.Data
 
                 //заполнили таблицу clients выборкой, которую возвращает GetFilteredClientsTable
                 DataTable clients = new DataTable();
-                clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
+                clients = GetFilteredClientsTable(filters);
 
 
                 //DataTable clients = new DataTable();
@@ -224,7 +225,7 @@ namespace TestGYApp.Data
                 //сортировка
                 DataView dvClients = new DataView();
                 dvClients = clients.AsDataView();
-                dvClients.Sort = sortOrder; // "FullName asc";
+                dvClients.Sort = filters.sortOrder; // "FullName asc";
                 clients = dvClients.ToTable("Clients");
 
 
@@ -272,21 +273,26 @@ namespace TestGYApp.Data
 
 
             //получение отфильтрованной таблицы Clients (базовый метод для фильтрации, вызова excel-отчета и получения списка ID при клике на общий чекбокс)
-            public static DataTable GetFilteredClientsTable(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+            //public static DataTable GetFilteredClientsTable(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+            public static DataTable GetFilteredClientsTable(DTO.ClientFilterObject filters)
+
         {
+
+
+
 
             string query = "[GetClients_Pager]";
             SqlCommand cmd = new SqlCommand(query);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@SearchTermName", searchTermName);
-            cmd.Parameters.AddWithValue("@searchTermLastName", searchTermLastName);
-            cmd.Parameters.AddWithValue("@searchTermPatronymic", searchTermPatronymic);
-            cmd.Parameters.AddWithValue("@SearchTermPhone", searchTermPhone);
-            cmd.Parameters.AddWithValue("@SearchTermMarketingInfo", searchTermMarketingInfo);
-            cmd.Parameters.AddWithValue("@AgeFrom", searchTermAgeFrom);
-            cmd.Parameters.AddWithValue("@AgeTo", searchTermAgeTo);
-            cmd.Parameters.AddWithValue("@BirthDateFrom", searchTermBirthDateFrom);
-            cmd.Parameters.AddWithValue("@BirthDateTo", searchTermBirthDateTo);
+            cmd.Parameters.AddWithValue("@SearchTermName", filters.searchTermName);
+            cmd.Parameters.AddWithValue("@searchTermLastName", filters.searchTermLastName);
+            cmd.Parameters.AddWithValue("@searchTermPatronymic", filters.searchTermPatronymic);
+            cmd.Parameters.AddWithValue("@SearchTermPhone", filters.searchTermPhone);
+            cmd.Parameters.AddWithValue("@SearchTermMarketingInfo", filters.searchTermMarketingInfo);
+            cmd.Parameters.AddWithValue("@AgeFrom", filters.searchTermAgeFrom);
+            cmd.Parameters.AddWithValue("@AgeTo", filters.searchTermAgeTo);
+            cmd.Parameters.AddWithValue("@BirthDateFrom", filters.searchTermBirthDateFrom);
+            cmd.Parameters.AddWithValue("@BirthDateTo", filters.searchTermBirthDateTo);
             //cmd.Parameters.AddWithValue("@PageIndex", pageIndex);
             //cmd.Parameters.AddWithValue("@PageSize", pageSize);
             cmd.Parameters.Add("@RecordCount", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
@@ -395,13 +401,14 @@ namespace TestGYApp.Data
 
 
         //Получение таблицы с клиентами для Excel-отчета
-        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+        public static DataTable GetClientsForExcel(DTO.ClientFilterObject filters)
 
 
         {
             //получили полную таблицу Clients с учетом фильтров
             DataTable clients = new DataTable();
-            clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
+            //clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
+            clients = GetFilteredClientsTable(filters);
 
 
             // УБИРАЕМ ЛИШНИЕ КОЛОНКИ

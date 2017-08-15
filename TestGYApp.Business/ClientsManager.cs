@@ -47,12 +47,14 @@ namespace TestGYApp.Business
 
         //универсализация эксперимент
 
-            
 
-        public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
+        
+
+       // public static string GetClientsPageGrid(string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, int pageSize)
+        public static string GetClientsPageGrid(DTO.ClientFilterObject filters, int pageIndex, int pageSize)
 
         {
-            return Data.ClientsRepository.GetClientsPageGrid( sortOrder,  searchTermName,  searchTermLastName,  searchTermPatronymic,  searchTermPhone,  searchTermMarketingInfo,  searchTermAgeFrom,  searchTermAgeTo,  searchTermBirthDateFrom,  searchTermBirthDateTo,  pageIndex,  pageSize);
+            return Data.ClientsRepository.GetClientsPageGrid(filters,  pageIndex,  pageSize);
         }
 
 
@@ -82,10 +84,11 @@ namespace TestGYApp.Business
 
 
         //Получение таблицы с клиентами для Excel-отчета
-        public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+        //public static DataTable GetClientsForExcel(string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo)
+        public static DataTable GetClientsForExcel(DTO.ClientFilterObject filters)
 
         {
-            return Data.ClientsRepository.GetClientsForExcel( searchTermName,  searchTermLastName,  searchTermPatronymic,  searchTermPhone,  searchTermMarketingInfo,  searchTermAgeFrom,  searchTermAgeTo,  searchTermBirthDateFrom,  searchTermBirthDateTo);
+            return Data.ClientsRepository.GetClientsForExcel(filters);
         }
 
         //public static DataTable GetDataForExcel(SqlCommand cmd, int pageIndex, int pageSize)

@@ -4,6 +4,17 @@ var sortingOrder = "FullName asc";
 var allItemsChecked;
 var clients; //переменная для хранения выборки в xml
 
+
+
+//объект с информацией о выюранных элементах
+var checkedItemsInfo = {
+    generalCheckbox: false,
+    checkedItems: null,
+    uncheckedItems: null
+};
+
+
+
 $(function () {
     $("[id*=CheckedItemsCollector]").hide();
     $("[id*=ServerReportButton]").hide();
@@ -148,7 +159,7 @@ $(function () {
 
             var isDublicate;
             for (var i = 0; i < checkedItemsArray.length; i++) {
-                var arrayElement = checkedItemsArray[i];
+                var arrayElement = checkedItemsArray[i]; 
                 if (arrayElement.toString() === itemID.toString()) {
                     isDublicate = true;
                     break;
@@ -194,10 +205,7 @@ $(function () {
         }
 
         else { $("[id*=ServerReportButton]").click(); }
-       // boot
-    //    alert("this is sparta");
-     //   $("[id*=CheckedItemsCollector]").val(checkedItemsArray);
-      //  GetExcel(checkedItemsArray);
+     
         
     });
 
@@ -215,126 +223,6 @@ $(function () {
     });
 
 
-
-
-
-
-//вызов метода ExporttoExcel
-
-
-    //Вызываем серверный метод обновления грида, передавая значения фильтров
-    function GetExcel(checkedItemsArray) {
-        $.ajax({
-            type: "POST",
-            url: "TestPage.aspx/WebExporttoExcel",
-            data:
-            JSON.stringify({
-                //"CheckedItemArray": checkedItemsArray
-                "test": checkedItemsArray
-
-            }),
-
-
-
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: OnAnswer,
-            failure: function (response) {
-                alert(response.d);
-                alert("failure");
-            },
-            error: function (response) {
-                alert(response.d);
-                alert("error");
-            }
-        });
-    }
-
-  
-
-    function OnAnswer(response) {
-        var xmlDoc = $.parseXML(response.d);
-        var xml = $(xmlDoc);
-         clients = xml.find("Clients");
-        if (row == null) {
-            row = $("[id*=MyClientsGridView] tr:last-child").clone(true);
-        }
-        $("[id*=MyClientsGridView] tr").not($("[id*=MyClientsGridView] tr:first-child")).remove();
-        if (clients.length > 0) {
-            $.each(clients, function () {
-                var customer = $(this);
-
-                //Заполняем колонку чекбокса
-                $("td", row).eq(0).html("<input type=\"checkbox\" id=selectItemCheckBox" + $(this).find("ID").text() + "\ class=\"selectItemCheckBox\" >");
-
-                //Заполняем имя как ссылку на форму просмотра
-                $("td", row).eq(1).html("<a href=\"/ClientDispForm.aspx?id=" + $(this).find("ID").text() + "\">" + $(this).find("cl_name").text() + "</a>");
-                //Заполняем номер телефона
-                $("td", row).eq(2).html($(this).find("Phone").text());
-
-                //форматируем номер телефона
-                $("td", row).eq(2).text(function (i, text) {
-                    return text.replace(/(\d{0})(\d{3})(\d{3})(\d{2})/, '$1($2) $3-$4-');
-                });
-
-                //Заполняем Дату рождения
-                $("td", row).eq(3).html($(this).find("BirthDate").text());
-
-                //Заполняем Возраст
-                $("td", row).eq(4).html($(this).find("Age").text());
-
-                //Заполняем E-mail
-                $("td", row).eq(5).html($(this).find("Email").text());
-
-                //Заполняем Примечание
-                $("td", row).eq(6).html($(this).find("Comment").text());
-
-                //Заполняем Откуда узнал
-                $("td", row).eq(7).html($(this).find("MarketingInfo").text());
-
-
-                $("[id*=MyClientsGridView]").append(row);
-                row = $("[id*=MyClientsGridView] tr:last-child").clone(true);
-            });
-
-
-            //генерируем пейджер
-            var pager = xml.find("Pager");
-            $(".Pager").ASPSnippets_Pager({
-                ActiveCssClass: "current",
-                PagerCssClass: "pager",
-                PageIndex: parseInt(pager.find("PageIndex").text()),
-                PageSize: parseInt(pager.find("PageSize").text()),
-                RecordCount: parseInt(pager.find("RecordCount").text())
-
-
-
-            });
-
-            //подсветка совпадения текста со значением из фильтра
-            //$(".cl_name").each(function () {
-            //    var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
-            //    $(this).html($(this).text().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
-
-            //});
-
-            //показываем пейджер
-            $(".Pager").show();
-
-        } else { //если ничего не найдено:
-            var empty_row = row.clone(true);
-            $("td:first-child", empty_row).attr("colspan", $("td", row).length);
-            $("td:first-child", empty_row).attr("align", "center");
-            $("td:first-child", empty_row).attr("width", "1170px");
-            $("td:first-child", empty_row).width("1105px");
-            $("td:first-child", empty_row).html("По заданным критериям ничего не найдено.");
-            $("td", empty_row).not($("td:first-child", empty_row)).remove();
-            $("[id*=MyClientsGridView]").append(empty_row);
-
-            $(".Pager").hide();
-
-        }
-    };
 
 
 /////////////form
@@ -590,7 +478,7 @@ $("[id*=MyClientsGridView] tr th.MarketingInfoHeader .MarketingInfoHeaderText").
     //Имя:
     $("[id*=FirstNameFilterTextBox]").live("keyup", function () {
        // GetClients(parseInt(1), sortingOrder, false);
-        GetClientsPageGrid(parseInt(1), sortingOrder); ///////////////////////////////////универсализация
+        GetClientsPageGrid(parseInt(1), sortingOrder); 
 
     });
 
@@ -749,26 +637,54 @@ $("[id*=ClearFiltersButton]").live("click", function () {
 ////////////////////////////////////   Универсализация (эксперимент)  ////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
 //Вызываем серверный метод обновления грида, передавая значения фильтров
 
 function GetClientsPageGrid(pageIndex, sortOrder) {
+
+    //Объект со значениями фильтров
+    var myFilters = {
+        sortOrder: sortOrder,
+        searchTermName: SearchTermName(),
+        searchTermLastName: SearchTermLastName(),
+        searchTermPatronymic: SearchTermPatronymic(),
+        searchTermPhone: SearchTermPhone(),
+        searchTermMarketingInfo: SearchTermMarketingInfo(),
+        searchTermAgeFrom: SearchTermAgeFrom(),
+        searchTermAgeTo: SearchTermAgeTo(),
+        searchTermBirthDateFrom: SearchTermBirthDateFrom(),
+        searchTermBirthDateTo: SearchTermBirthDateTo(),
+        pageIndex: pageIndex
+    };
+
+    var filters = JSON.stringify(filters)
+
+
+
     $.ajax({
         type: "POST",
         url: "TestPage.aspx/GetClientsPageGrid",
-        data:
-        JSON.stringify({
-            "sortOrder": sortOrder
-            , "searchTermName": SearchTermName()
-            , "searchTermLastName": SearchTermLastName()
-            , "searchTermPatronymic": SearchTermPatronymic()
-            , "searchTermPhone": SearchTermPhone()
-            , "searchTermMarketingInfo": SearchTermMarketingInfo()
-            , "searchTermAgeFrom": SearchTermAgeFrom()
-            , "searchTermAgeTo": SearchTermAgeTo()
-            , "searchTermBirthDateFrom": SearchTermBirthDateFrom()
-            , "searchTermBirthDateTo": SearchTermBirthDateTo()
-            , "pageIndex": pageIndex
-        }),
+        data: JSON.stringify({ filters: myFilters }),
+        //JSON.stringify({
+        //    "sortOrder": sortOrder
+        //    , "searchTermName": SearchTermName()
+        //    , "searchTermLastName": SearchTermLastName()
+        //    , "searchTermPatronymic": SearchTermPatronymic()
+        //    , "searchTermPhone": SearchTermPhone()
+        //    , "searchTermMarketingInfo": SearchTermMarketingInfo()
+        //    , "searchTermAgeFrom": SearchTermAgeFrom()
+        //    , "searchTermAgeTo": SearchTermAgeTo()
+        //    , "searchTermBirthDateFrom": SearchTermBirthDateFrom()
+        //    , "searchTermBirthDateTo": SearchTermBirthDateTo()
+        //    , "pageIndex": pageIndex
+        //}),
+
+        //JSON.stringify(filters),
+        
+        
+
 
 
 

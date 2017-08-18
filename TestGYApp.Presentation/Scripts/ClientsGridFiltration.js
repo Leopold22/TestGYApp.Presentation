@@ -6,17 +6,9 @@ var clients; //переменная для хранения выборки в xm
 
 
 
-//объект с информацией о выюранных элементах
-var checkedItemsInfo = {
-    generalCheckbox: false,
-    checkedItems: null,
-    uncheckedItems: null
-};
-
-
 
 $(function () {
-    $("[id*=CheckedItemsCollector]").hide();
+  //  $("[id*=CheckedItemsCollector]").hide();
     $("[id*=ServerReportButton]").hide();
     $("[id*=MyClientsGridView] tr th.CheckboxHeader").html("<input type=\"checkbox\" id=\"selectAllCheckBox\" class=\"selectAllCheckBox\" >"); //рисуем общий чекбокс
 });
@@ -30,79 +22,72 @@ $(function () {
 
 
 
-//функции для сортировки
-    function GetSortedHeaderClass(sortingOrder) {
+//РАБОТА С ЧЕКБОКСАМИ
 
-        var sortedHeaderClass;
+    //объект с информацией о выбранных элементах
+    var checkedItemsInfo = {
+        generalCheckboxChecked: false,
+        checkedItems: [],
+        uncheckedItems: []
+    };
 
-        if (sortingOrder == "FullName asc" || sortingOrder == "FullName desc") { sortedHeaderClass = "FullNameHeader" };
-        if (sortingOrder == "Phone asc" || sortingOrder == "Phone desc") { sortedHeaderClass = "PhoneHeader" };
-        if (sortingOrder == "BirthDateForSort asc" || sortingOrder == "BirthDateForSort desc") { sortedHeaderClass = "BirthDateHeader" };
-        if (sortingOrder == "Age asc" || sortingOrder == "Age desc") { sortedHeaderClass = "AgeHeader" };
-        if (sortingOrder == "Email asc" || sortingOrder == "Email desc") { sortedHeaderClass = "EmailHeader" };
-        if (sortingOrder == "Comment asc" || sortingOrder == "Comment desc") { sortedHeaderClass = "CommentHeader" };
-        if (sortingOrder == "MarketingInfo asc" || sortingOrder == "MarketingInfo desc") { sortedHeaderClass = "MarketingInfoHeader" };
 
-        return sortedHeaderClass;
 
-    }
-
-    function GetColumnNameByClass(sortedHeaderClass) {
-
-        var columnName;
-
-        if (sortedHeaderClass == "FullNameHeader") { columnName = "Имя"};
-        if (sortedHeaderClass == "PhoneHeader") { columnName = "Телефон" };
-        if (sortedHeaderClass == "BirthDateHeader") { columnName = "Дата рождения" };
-        if (sortedHeaderClass == "AgeHeader") { columnName = "Возраст" };
-        if (sortedHeaderClass == "EmailHeader") { columnName = "E-mail" };
-        if (sortedHeaderClass == "CommentHeader") { columnName = "Примечание" };
-        if (sortedHeaderClass == "MarketingInfoHeader") { columnName = "Откуда узнал о клубе" };
-
-        return columnName;
-
-    }
-
-//массив id
+    //массив id
     var checkedItemsArray = [];
-
+    var uncheckedItemsArray = [];
 
 
 
     //при клике на общий чекбокс
     $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox").live("click", function () {
         checkedItemsArray.splice(0, checkedItemsArray.length);
+        uncheckedItemsArray.splice(0, uncheckedItemsArray.length);
+        $("[id*=UncheckedItemsCollector]").val(uncheckedItemsArray);
+        $("[id*=CheckedItemsCollector]").val(checkedItemsArray);
+
         GetClientsPageGrid(parseInt(1), sortingOrder);
         var isChecked = $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox:checkbox:checked").length > 0;
+        checkedItemsInfo.generalCheckboxChecked = $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox:checkbox:checked").length > 0;
+       // alert(isChecked);
+     //   alert(checkedItemsInfo.generalCheckboxChecked);
 
         if (isChecked) //если галку выставили
         {
-            alert("hi");
-            alert(window.clients.length);
-            
-            $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").click();
-            $.each(window.clients, function () {
-                alert("ttt");
-                var customer = $(this);
-                var itemID = $(this).find("ID").text();
-                checkedItemsArray.push(itemID);
-              
-            });
+            //   alert("hi");
+            //  alert(window.clients.length);
 
-            alert("finish");
-            alert(checkedItemsArray);
+           // $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").click();
+            $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").attr("checked", true);
+
+            //$.each(window.clients, function () {
+            //  //  alert("ttt");
+            //    var customer = $(this);
+            //    var itemID = $(this).find("ID").text();
+            //    checkedItemsArray.push(itemID);
+
+            //});
+
+          //  alert("finish");
+            //  alert(checkedItemsArray);
         }
-           
-            // $("[id*=ServerReportButton]").click()
-        
+        else {
+
+            alert("uncheck all");
+            $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").prop("checked", false);
+
+        }
+
+        // $("[id*=ServerReportButton]").click()
 
 
-     
-           
-           
 
 
-        
+
+
+
+
+
 
         //var checkboxElementId = $(this).attr('id');
         //var itemID = checkboxElementId.match(/\d+/);
@@ -145,53 +130,132 @@ $(function () {
     });
 
 
-//при клике на чекбокс
+    //при клике на чекбокс
     $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").live("click", function () {
 
+     
 
-        
         var checkboxElementId = $(this).attr('id');
         var itemID = checkboxElementId.match(/\d+/);
         var elementAdress = "[id*=MyClientsGridView] tr td.CheckboxField [id=" + checkboxElementId + "]:checkbox:checked";
         var isChecked = $(elementAdress).length > 0;
 
-        if (isChecked) {
+        // если выставлен флаг в общем чекбоксе
+        if (checkedItemsInfo.generalCheckboxChecked) {
 
-            var isDublicate;
-            for (var i = 0; i < checkedItemsArray.length; i++) {
-                var arrayElement = checkedItemsArray[i]; 
-                if (arrayElement.toString() === itemID.toString()) {
-                    isDublicate = true;
-                    break;
-                }      
+            if (isChecked) {
+
+                
+
+                for (var i = 0; i < uncheckedItemsArray.length; i++) {
+                    var arrayElement = uncheckedItemsArray[i];
+                    if (arrayElement.toString() === itemID.toString()) {
+                        uncheckedItemsArray.splice(i, 1);
+                        break;
+                    }
+                }
+                
             }
+            else {
 
-            if (!isDublicate) { checkedItemsArray.push(itemID); };
+                var isDublicate;
+                for (var i = 0; i < uncheckedItemsArray.length; i++) {
+                    var arrayElement = uncheckedItemsArray[i];
+                    if (arrayElement.toString() === itemID.toString()) {
+                        isDublicate = true;
+                        break;
+                    }
+                }
+
+                if (!isDublicate) { uncheckedItemsArray.push(itemID); };
+             
+            }
+            //   alert(checkedItemsArray);
+
+            //  alert("yahooo")
+            $("[id*=UncheckedItemsCollector]").val(uncheckedItemsArray);
+
+
 
         }
         else {
 
-            for (var i = 0; i < checkedItemsArray.length; i++) {
-                var arrayElement = checkedItemsArray[i];            
-                if (arrayElement.toString() === itemID.toString()) {                  
-                    checkedItemsArray.splice(i, 1);
-                    break;
+            if (isChecked) {
+
+                var isDublicate;
+                for (var i = 0; i < checkedItemsArray.length; i++) {
+                    var arrayElement = checkedItemsArray[i];
+                    if (arrayElement.toString() === itemID.toString()) {
+                        isDublicate = true;
+                        break;
+                    }
+                }
+
+                if (!isDublicate) { checkedItemsArray.push(itemID); };
+
+            }
+            else {
+
+                for (var i = 0; i < checkedItemsArray.length; i++) {
+                    var arrayElement = checkedItemsArray[i];
+                    if (arrayElement.toString() === itemID.toString()) {
+                        checkedItemsArray.splice(i, 1);
+                        break;
+                    }
                 }
             }
+            //   alert(checkedItemsArray);
+
+            //  alert("yahooo")
+            $("[id*=CheckedItemsCollector]").val(checkedItemsArray);
+
+            //  alert($("[id*=CheckedItemsCollector]").val());
+            //  bootbox.alert("Не выбрано ни одного элемента");
         }
-      //  alert(checkedItemsArray);
 
-      //  alert("yahooo")
-        $("[id*=CheckedItemsCollector]").val(checkedItemsArray);
-
-      //  alert($("[id*=CheckedItemsCollector]").val());
-      //  bootbox.alert("Не выбрано ни одного элемента");
-
-     
     }); 
 
 
-//по кнопке "Сформировать отчет"
+
+//функции для сортировки
+    function GetSortedHeaderClass(sortingOrder) {
+
+        var sortedHeaderClass;
+
+        if (sortingOrder == "FullName asc" || sortingOrder == "FullName desc") { sortedHeaderClass = "FullNameHeader" };
+        if (sortingOrder == "Phone asc" || sortingOrder == "Phone desc") { sortedHeaderClass = "PhoneHeader" };
+        if (sortingOrder == "BirthDateForSort asc" || sortingOrder == "BirthDateForSort desc") { sortedHeaderClass = "BirthDateHeader" };
+        if (sortingOrder == "Age asc" || sortingOrder == "Age desc") { sortedHeaderClass = "AgeHeader" };
+        if (sortingOrder == "Email asc" || sortingOrder == "Email desc") { sortedHeaderClass = "EmailHeader" };
+        if (sortingOrder == "Comment asc" || sortingOrder == "Comment desc") { sortedHeaderClass = "CommentHeader" };
+        if (sortingOrder == "MarketingInfo asc" || sortingOrder == "MarketingInfo desc") { sortedHeaderClass = "MarketingInfoHeader" };
+
+        return sortedHeaderClass;
+
+    }
+
+    function GetColumnNameByClass(sortedHeaderClass) {
+
+        var columnName;
+
+        if (sortedHeaderClass == "FullNameHeader") { columnName = "Имя"};
+        if (sortedHeaderClass == "PhoneHeader") { columnName = "Телефон" };
+        if (sortedHeaderClass == "BirthDateHeader") { columnName = "Дата рождения" };
+        if (sortedHeaderClass == "AgeHeader") { columnName = "Возраст" };
+        if (sortedHeaderClass == "EmailHeader") { columnName = "E-mail" };
+        if (sortedHeaderClass == "CommentHeader") { columnName = "Примечание" };
+        if (sortedHeaderClass == "MarketingInfoHeader") { columnName = "Откуда узнал о клубе" };
+
+        return columnName;
+
+    }
+
+
+
+
+//ФУНКЦИОНАЛЬНЫЕ КНОПКИ
+
+    //Кнопка "Сформировать отчет"
     $("[id*=ClientReportButton]").live("click", function () {
         var test = $("[id*=CheckedItemsCollector]").val();
         if (test === "") {
@@ -210,12 +274,26 @@ $(function () {
     });
 
 
+    //Кнопка "Очистить все фильтры"
+    $("[id*=ClearFiltersButton]").live("click", function () {
+        $("[id*=FirstNameFilterTextBox]").val('');
+        $("[id*=LastNameFilterTextBox]").val('');
+        $("[id*=PatronymicFilterTextBox]").val('');
+        $("[id*=PhoneFilterTextBox]").val('');
+        $("[id*=AgeFromFilterTextBox]").val('');
+        $("[id*=AgeToFilterTextBox]").val('');
+        $("[id*=BirthDateFromFilterTextBox]").val('');
+        $("[id*=BirthDateToFilterTextBox]").val('');
+        $("[id*=MarketingInfoDropDownFilter]").val('');
+        GetClientsPageGrid(parseInt(1), sortingOrder);
+
+    });
 
 
     //при переходе по страницам пейджера очищаем массив выбранных элементов
     $(".Pager .page").live("click", function () {      
-        checkedItemsArray.splice(0, checkedItemsArray.length);
-        $("[id*=CheckedItemsCollector]").val("");
+       // checkedItemsArray.splice(0, checkedItemsArray.length);
+      //  $("[id*=CheckedItemsCollector]").val("");
        // alert($("[id*=CheckedItemsCollector]").val());
         $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox").prop("checked", false);
 
@@ -548,20 +626,6 @@ $(".Pager .page").live("click", function () {
 
 
 
-//Кнопка "Очистить все фильтры"
-$("[id*=ClearFiltersButton]").live("click", function () {
-    $("[id*=FirstNameFilterTextBox]").val('');
-    $("[id*=LastNameFilterTextBox]").val('');
-    $("[id*=PatronymicFilterTextBox]").val('');
-    $("[id*=PhoneFilterTextBox]").val('');
-    $("[id*=AgeFromFilterTextBox]").val('');
-    $("[id*=AgeToFilterTextBox]").val('');
-    $("[id*=BirthDateFromFilterTextBox]").val('');
-    $("[id*=BirthDateToFilterTextBox]").val('');
-    $("[id*=MarketingInfoDropDownFilter]").val('');
-    GetClientsPageGrid(parseInt(1), sortingOrder);
-
-});
 
 
 

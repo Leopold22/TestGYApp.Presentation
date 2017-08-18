@@ -42,8 +42,10 @@
                     <script src="Scripts/jquery.dateFormat-1.0.js"></script>
 
                    
+                     <%-- Скрытые контролы для работы с чекбоксами: --%>
+                    <asp:TextBox ID="CheckedItemsCollector" runat="server" placeholder="My checked values..." Width="192px" Height="25px" Visible="true"></asp:TextBox>
+                    <asp:TextBox ID="UncheckedItemsCollector" runat="server" placeholder="My unckecked values..." Width="192px" Height="25px" Visible="true"></asp:TextBox>
 
-                    <asp:TextBox ID="CheckedItemsCollector" runat="server" placeholder="My values..." Width="192px" Height="25px" Visible="true"></asp:TextBox>
 
                     Список клиентов<br />
                     <br />

@@ -34,7 +34,7 @@ namespace TestGYApp.Presentation
 
 
     public partial class TestPage : System.Web.UI.Page
-        
+
     {
         public static int pageSize = 25; //кол-во записей на странице
 
@@ -44,7 +44,7 @@ namespace TestGYApp.Presentation
             //остальное будет прорисовано на клиенте
             DataTable clients = new DataTable();
 
-            DTO.ClientFilterObject  defaultFilters = new DTO.ClientFilterObject();
+            DTO.ClientFilterObject defaultFilters = new DTO.ClientFilterObject();
 
 
             //defaultFilters.sortOrder = "FullName asc";
@@ -61,7 +61,7 @@ namespace TestGYApp.Presentation
 
 
             // clients = GetClientsPageGrid("FullName asc", "", "", "", "", "", null, null, "", "",1);
-           // MyClientsGridView.DataSource = GetClientsPageGrid("FullName asc", "", "", "", "", "", null, null, "", "", 1);
+            // MyClientsGridView.DataSource = GetClientsPageGrid("FullName asc", "", "", "", "", "", null, null, "", "", 1);
             MyClientsGridView.DataSource = GetClientsPageGrid(defaultFilters);
 
             MyClientsGridView.DataBind();
@@ -71,7 +71,7 @@ namespace TestGYApp.Presentation
 
 
 
-        
+
 
         //для фильтрации
         [WebMethod]
@@ -83,7 +83,7 @@ namespace TestGYApp.Presentation
             //string sortOrder, string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo, int pageIndex, bool getAllItems
             return Business.ClientsManager.GetClients(sortOrder, searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo, pageIndex, pageSize, getAllItems);
         }
-                     
+
 
 
         public static DataSet GetData(SqlCommand cmd, int pageIndex, string sortOrder, bool getAllItems)
@@ -112,7 +112,7 @@ namespace TestGYApp.Presentation
             //string searchTermBirthDateTo = filters.searchTermBirthDateTo;
             //int pageIndex = filters.pageIndex;
 
-            return Business.ClientsManager.GetClientsPageGrid(filters,  filters.pageIndex,  pageSize);
+            return Business.ClientsManager.GetClientsPageGrid(filters, filters.pageIndex, pageSize);
         }
 
 
@@ -150,11 +150,11 @@ namespace TestGYApp.Presentation
         {
         }
 
-   
+
 
         protected void CreateButton_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         protected void AddClientButton_Click(object sender, ImageClickEventArgs e)
@@ -164,7 +164,7 @@ namespace TestGYApp.Presentation
         }
 
 
-        public  void Test() {
+        public void Test() {
             FirstNameFilterTextBox.Text = "123";
 
 
@@ -174,12 +174,12 @@ namespace TestGYApp.Presentation
 
         protected void ReportButton_Click(object sender, ImageClickEventArgs e)
         {
-           // CheckedItemsCollector.Text = "123";
+            // CheckedItemsCollector.Text = "123";
 
             string CheckedItems = CheckedItemsCollector.Text;
 
             if (CheckedItems == "")
-                {
+            {
 
                 return;
 
@@ -189,10 +189,10 @@ namespace TestGYApp.Presentation
             int[] nums = Array.ConvertAll(CheckedItems.Split(','), int.Parse);
 
 
-           
-           ExporttoExcel(nums);
 
-    
+            ExporttoExcel(nums);
+
+
 
 
         }
@@ -202,7 +202,7 @@ namespace TestGYApp.Presentation
         public static void GetExcelReport()
         {
 
-         
+
 
         }
 
@@ -225,10 +225,10 @@ namespace TestGYApp.Presentation
 
         }
 
-          public override void VerifyRenderingInServerForm(Control control)
-    {
-        /* проверка рендеринга контрола (?) */
-    }
+        public override void VerifyRenderingInServerForm(Control control)
+        {
+            /* проверка рендеринга контрола (?) */
+        }
 
 
 
@@ -288,11 +288,11 @@ namespace TestGYApp.Presentation
 
 
 
-      //  [WebMethod]
-        protected  void ExporttoExcel(int[] nums)
+        //  [WebMethod]
+        protected void ExporttoExcel(int[] nums)
         {
 
-            
+
 
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.Buffer = true;
@@ -304,32 +304,32 @@ namespace TestGYApp.Presentation
             HttpContext.Current.Response.Write(@"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.0 Transitional//EN"">");
 
 
-       
+
             HttpContext.Current.Response.Write("<font style='font-size:10.0pt; font-family:Calibri;'>");
             HttpContext.Current.Response.Write("<BR><BR><BR>");
-         
+
             HttpContext.Current.Response.Write("<Table border='1' bgColor='#ffffff' " +
               "borderColor='#000000' cellSpacing='0' cellPadding='0' " +
               "style='font-size:10.0pt; font-family:Calibri; background:white;'> <TR>");
 
             DataTable clients = new DataTable();
             // clients = GetClientsForExcel("", "", "", "", "", null, null, null, null);
-            clients = GetClientsForExcel(new DTO.ClientFilterObject());  
+            clients = GetClientsForExcel(new DTO.ClientFilterObject());
 
 
             //  int columnscount = MyClientsGridView.Columns.Count;
-            int columnscount = clients.Columns.Count; 
+            int columnscount = clients.Columns.Count;
             // int columnscount = 7;
 
             for (int j = 0; j < columnscount; j++)
-            {   
+            {
                 HttpContext.Current.Response.Write(@"<Td bgcolor='#490b41' ' >");
-              
+
                 HttpContext.Current.Response.Write("<B>");
 
                 HttpContext.Current.Response.Write(@"<font color=""white"">");
                 HttpContext.Current.Response.Write(clients.Columns[j].ColumnName.ToString());
-                            
+
 
                 HttpContext.Current.Response.Write(@"</font>");
 
@@ -338,8 +338,8 @@ namespace TestGYApp.Presentation
             }
             HttpContext.Current.Response.Write("</TR>");
 
-           
-          //  string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo
+
+            //  string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo
 
 
 
@@ -360,18 +360,18 @@ namespace TestGYApp.Presentation
                 //}
 
 
-                
-                    HttpContext.Current.Response.Write("<TR>");
-                    for (int i = 0; i < clients.Columns.Count; i++)
-                    {
-                        HttpContext.Current.Response.Write("<Td>");
-                        HttpContext.Current.Response.Write(row[i].ToString());
-                        HttpContext.Current.Response.Write("</Td>");
-                    }
 
-                    HttpContext.Current.Response.Write("</TR>");
+                HttpContext.Current.Response.Write("<TR>");
+                for (int i = 0; i < clients.Columns.Count; i++)
+                {
+                    HttpContext.Current.Response.Write("<Td>");
+                    HttpContext.Current.Response.Write(row[i].ToString());
+                    HttpContext.Current.Response.Write("</Td>");
+                }
 
-               
+                HttpContext.Current.Response.Write("</TR>");
+
+
 
 
 
@@ -390,6 +390,17 @@ namespace TestGYApp.Presentation
 
 
         }
+
+
+
+        [WebMethod]
+        public void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        {
+            Business.ClientsManager.BuildExcelReport(checkedItems, filters);
+
+        }
+
+
     }
 }
 

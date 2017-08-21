@@ -530,7 +530,20 @@ namespace TestGYApp.Data
 
 
 
-    
+        public void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        {
+
+            DataTable clients = GetClientsForExcel(filters);
+
+            if (checkedItems.GeneralCheckboxChecked)
+            {
+
+            }
+
+        }
+
+
+
 
 
     }

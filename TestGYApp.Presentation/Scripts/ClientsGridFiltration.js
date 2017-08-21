@@ -1,9 +1,8 @@
 ﻿
 
 var sortingOrder = "FullName asc";
-var allItemsChecked;
+//var allItemsChecked;
 var clients; //переменная для хранения выборки в xml
-
 
 
 
@@ -27,104 +26,36 @@ $(function () {
     //объект с информацией о выбранных элементах
     var checkedItemsInfo = {
         generalCheckboxChecked: false,
-        checkedItems: [],
-        uncheckedItems: []
+        checkedItemsArray: [],
+        uncheckedItemsArray: []
     };
 
 
 
     //массив id
-    var checkedItemsArray = [];
-    var uncheckedItemsArray = [];
+    //var checkedItemsArray = [];
+    //var uncheckedItemsArray = [];
 
 
 
     //при клике на общий чекбокс
     $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox").live("click", function () {
-        checkedItemsArray.splice(0, checkedItemsArray.length);
-        uncheckedItemsArray.splice(0, uncheckedItemsArray.length);
-        $("[id*=UncheckedItemsCollector]").val(uncheckedItemsArray);
-        $("[id*=CheckedItemsCollector]").val(checkedItemsArray);
+        checkedItemsInfo.checkedItemsArray.splice(0, checkedItemsInfo.checkedItemsArray.length);
+        checkedItemsInfo.uncheckedItemsArray.splice(0, checkedItemsInfo.uncheckedItemsArray.length);
+        $("[id*=UncheckedItemsCollector]").val(checkedItemsInfo.uncheckedItemsArray);
+        $("[id*=CheckedItemsCollector]").val(checkedItemsInfo.checkedItemsArray);
 
-        GetClientsPageGrid(parseInt(1), sortingOrder);
-        var isChecked = $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox:checkbox:checked").length > 0;
+     
         checkedItemsInfo.generalCheckboxChecked = $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox:checkbox:checked").length > 0;
-       // alert(isChecked);
-     //   alert(checkedItemsInfo.generalCheckboxChecked);
+    
 
-        if (isChecked) //если галку выставили
+        if (checkedItemsInfo.generalCheckboxChecked) 
         {
-            //   alert("hi");
-            //  alert(window.clients.length);
-
-           // $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").click();
             $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").attr("checked", true);
-
-            //$.each(window.clients, function () {
-            //  //  alert("ttt");
-            //    var customer = $(this);
-            //    var itemID = $(this).find("ID").text();
-            //    checkedItemsArray.push(itemID);
-
-            //});
-
-          //  alert("finish");
-            //  alert(checkedItemsArray);
         }
         else {
-
-            alert("uncheck all");
             $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").prop("checked", false);
-
         }
-
-        // $("[id*=ServerReportButton]").click()
-
-
-
-
-
-
-
-
-
-
-        //var checkboxElementId = $(this).attr('id');
-        //var itemID = checkboxElementId.match(/\d+/);
-        //var elementAdress = "[id*=MyClientsGridView] tr td.CheckboxField [id=" + checkboxElementId + "]:checkbox:checked";
-        //var isChecked = $(elementAdress).length > 0;
-
-        //if (isChecked) {
-
-        //    var isDublicate;
-        //    for (var i = 0; i < checkedItemsArray.length; i++) {
-        //        var arrayElement = checkedItemsArray[i];
-        //        if (arrayElement.toString() === itemID.toString()) {
-        //            isDublicate = true;
-        //            break;
-        //        }
-        //    }
-
-        //    if (!isDublicate) { checkedItemsArray.push(itemID); };
-
-        //}
-        //else {
-
-        //    for (var i = 0; i < checkedItemsArray.length; i++) {
-        //        var arrayElement = checkedItemsArray[i];
-        //        if (arrayElement.toString() === itemID.toString()) {
-        //            checkedItemsArray.splice(i, 1);
-        //            break;
-        //        }
-        //    }
-        //}
-        ////  alert(checkedItemsArray);
-
-        ////  alert("yahooo")
-        //$("[id*=CheckedItemsCollector]").val(checkedItemsArray);
-
-        //alert($("[id*=CheckedItemsCollector]").val());
-        ////  bootbox.alert("Не выбрано ни одного элемента");
 
 
     });
@@ -132,8 +63,6 @@ $(function () {
 
     //при клике на чекбокс
     $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").live("click", function () {
-
-     
 
         var checkboxElementId = $(this).attr('id');
         var itemID = checkboxElementId.match(/\d+/);
@@ -145,12 +74,10 @@ $(function () {
 
             if (isChecked) {
 
-                
-
-                for (var i = 0; i < uncheckedItemsArray.length; i++) {
-                    var arrayElement = uncheckedItemsArray[i];
+                for (var i = 0; i < checkedItemsInfo.uncheckedItemsArray.length; i++) {
+                    var arrayElement = checkedItemsInfo.uncheckedItemsArray[i];
                     if (arrayElement.toString() === itemID.toString()) {
-                        uncheckedItemsArray.splice(i, 1);
+                        checkedItemsInfo.uncheckedItemsArray.splice(i, 1);
                         break;
                     }
                 }
@@ -159,22 +86,19 @@ $(function () {
             else {
 
                 var isDublicate;
-                for (var i = 0; i < uncheckedItemsArray.length; i++) {
-                    var arrayElement = uncheckedItemsArray[i];
+                for (var i = 0; i < checkedItemsInfo.uncheckedItemsArray.length; i++) {
+                    var arrayElement = checkedItemsInfo.uncheckedItemsArray[i];
                     if (arrayElement.toString() === itemID.toString()) {
                         isDublicate = true;
                         break;
                     }
                 }
 
-                if (!isDublicate) { uncheckedItemsArray.push(itemID); };
+                if (!isDublicate) { checkedItemsInfo.uncheckedItemsArray.push(itemID); };
              
             }
-            //   alert(checkedItemsArray);
 
-            //  alert("yahooo")
-            $("[id*=UncheckedItemsCollector]").val(uncheckedItemsArray);
-
+            $("[id*=UncheckedItemsCollector]").val(checkedItemsInfo.uncheckedItemsArray);
 
 
         }
@@ -183,34 +107,30 @@ $(function () {
             if (isChecked) {
 
                 var isDublicate;
-                for (var i = 0; i < checkedItemsArray.length; i++) {
-                    var arrayElement = checkedItemsArray[i];
+                for (var i = 0; i < checkedItemsInfo.checkedItemsArray.length; i++) {
+                    var arrayElement = checkedItemsInfo.checkedItemsArray[i];
                     if (arrayElement.toString() === itemID.toString()) {
                         isDublicate = true;
                         break;
                     }
                 }
 
-                if (!isDublicate) { checkedItemsArray.push(itemID); };
+                if (!isDublicate) { checkedItemsInfo.checkedItemsArray.push(itemID); };
 
             }
             else {
 
-                for (var i = 0; i < checkedItemsArray.length; i++) {
-                    var arrayElement = checkedItemsArray[i];
+                for (var i = 0; i < checkedItemsInfo.checkedItemsArray.length; i++) {
+                    var arrayElement = checkedItemsInfo.checkedItemsArray[i];
                     if (arrayElement.toString() === itemID.toString()) {
-                        checkedItemsArray.splice(i, 1);
+                        checkedItemsInfo.checkedItemsArray.splice(i, 1);
                         break;
                     }
                 }
             }
-            //   alert(checkedItemsArray);
 
-            //  alert("yahooo")
-            $("[id*=CheckedItemsCollector]").val(checkedItemsArray);
+            $("[id*=CheckedItemsCollector]").val(checkedItemsInfo.checkedItemsArray);
 
-            //  alert($("[id*=CheckedItemsCollector]").val());
-            //  bootbox.alert("Не выбрано ни одного элемента");
         }
 
     }); 
@@ -251,8 +171,6 @@ $(function () {
     }
 
 
-
-
 //ФУНКЦИОНАЛЬНЫЕ КНОПКИ
 
     //Кнопка "Сформировать отчет"
@@ -269,7 +187,6 @@ $(function () {
         }
 
         else { $("[id*=ServerReportButton]").click(); }
-     
         
     });
 
@@ -287,17 +204,6 @@ $(function () {
         $("[id*=MarketingInfoDropDownFilter]").val('');
         GetClientsPageGrid(parseInt(1), sortingOrder);
 
-    });
-
-
-    //при переходе по страницам пейджера очищаем массив выбранных элементов
-    $(".Pager .page").live("click", function () {      
-       // checkedItemsArray.splice(0, checkedItemsArray.length);
-      //  $("[id*=CheckedItemsCollector]").val("");
-       // alert($("[id*=CheckedItemsCollector]").val());
-        $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox").prop("checked", false);
-
-       
     });
 
 
@@ -324,23 +230,6 @@ $(function () {
 
         form.submit();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -621,10 +510,8 @@ $("[id*=MyClientsGridView] tr th.MarketingInfoHeader .MarketingInfoHeaderText").
 //Вызов фильрации по переключению страниц
 $(".Pager .page").live("click", function () {
    // GetClients(parseInt($(this).attr('page')), sortingOrder, false);
-    GetClientsPageGrid(parseInt($(this).attr('page')), sortingOrder);
+    GetClientsPageGrid(parseInt($(this).attr('page')), sortingOrder);    
 });
-
-
 
 
 
@@ -835,6 +722,34 @@ function OnSuccess(response) {
 
         //показываем пейджер
         $(".Pager").show();
+
+
+        //выставляем ранее отмеченные/снятые чекбоксы
+
+        if (checkedItemsInfo.generalCheckboxChecked) {
+            $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").attr("checked", true);
+
+            checkedItemsInfo.uncheckedItemsArray.forEach(function (item, i, checkedItemsArray) {
+                var elementName = "[id=selectItemCheckBox" + item + "]";
+                if ($(elementName.length)) {
+                    $(elementName).attr("checked", false);
+                }
+            });
+
+        }
+        else {
+            checkedItemsInfo.checkedItemsArray.forEach(function (item, i, checkedItemsArray) {
+                var elementName = "[id=selectItemCheckBox" + item + "]";
+                if ($(elementName.length)) {
+                    $(elementName).attr("checked", true);
+                }
+            });
+        }
+       
+
+
+
+    
 
     } else { //если ничего не найдено:
         var empty_row = row.clone(true);

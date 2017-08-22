@@ -530,15 +530,41 @@ namespace TestGYApp.Data
 
 
 
-        public void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        public static DataTable BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
         {
-
+            //DataSet ds = new DataSet();
             DataTable clients = GetClientsForExcel(filters);
+            clients.PrimaryKey = new DataColumn[] { clients.Columns["ID"] };
+            // ds.Tables.Add(clients);
+
+            DataTable excelClients = clients.Clone();
+
 
             if (checkedItems.GeneralCheckboxChecked)
             {
+                foreach (var item in checkedItems.UncheckedItemsArray)
+                {
+                    // DataRow row = clients.Rows.Find(item);
+                    int rowIndex = clients.Rows.IndexOf(clients.Rows.Find(item));
+                    clients.Rows.RemoveAt(rowIndex);
+                }
+            }
+            else
+            {
+                foreach (var item in checkedItems.CheckedItemsArray)
+                {
+                    
+                    // DataRow row = clients.Rows.Find(item);
+                    int rowIndex = clients.Rows.IndexOf(clients.Rows.Find(item));
+                    clients.Rows.RemoveAt(rowIndex);
+
+                    //excelClients.
+                }
 
             }
+
+
+            return clients;
 
         }
 

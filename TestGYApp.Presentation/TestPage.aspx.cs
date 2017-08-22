@@ -394,9 +394,111 @@ namespace TestGYApp.Presentation
 
 
         [WebMethod]
-        public void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+       // public static void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        public static void BuildExcelReport(bool generalCheckboxChecked, string[] checkedItemsArray, string[]  uncheckedItemsArray, DTO.ClientFilterObject filters)
+
         {
-            Business.ClientsManager.BuildExcelReport(checkedItems, filters);
+            DTO.CheckedItemsInfo checkedItems = new DTO.CheckedItemsInfo();
+            checkedItems.GeneralCheckboxChecked = generalCheckboxChecked;
+            checkedItems.CheckedItemsArray = checkedItemsArray;
+            checkedItems.UncheckedItemsArray = uncheckedItemsArray;
+
+
+            DataTable clients = new DataTable();
+            clients = Business.ClientsManager.BuildExcelReport(checkedItems, filters);
+
+
+
+
+
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.Buffer = true;
+            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=Reports.xls");
+            HttpContext.Current.Response.Charset = "";
+            HttpContext.Current.Response.ContentType = "application/ms-excel";
+            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.Unicode;
+            HttpContext.Current.Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
+            HttpContext.Current.Response.Write(@"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.0 Transitional//EN"">");
+
+
+
+            HttpContext.Current.Response.Write("<font style='font-size:10.0pt; font-family:Calibri;'>");
+            HttpContext.Current.Response.Write("<BR><BR><BR>");
+
+            HttpContext.Current.Response.Write("<Table border='1' bgColor='#ffffff' " +
+              "borderColor='#000000' cellSpacing='0' cellPadding='0' " +
+              "style='font-size:10.0pt; font-family:Calibri; background:white;'> <TR>");
+
+          //  DataTable clients = new DataTable();
+            // clients = GetClientsForExcel("", "", "", "", "", null, null, null, null);
+          //  clients = GetClientsForExcel(new DTO.ClientFilterObject());
+
+
+            //  int columnscount = MyClientsGridView.Columns.Count;
+            int columnscount = clients.Columns.Count;
+            // int columnscount = 7;
+
+            for (int j = 0; j < columnscount; j++)
+            {
+                HttpContext.Current.Response.Write(@"<Td bgcolor='#490b41' ' >");
+
+                HttpContext.Current.Response.Write("<B>");
+
+                HttpContext.Current.Response.Write(@"<font color=""white"">");
+                HttpContext.Current.Response.Write(clients.Columns[j].ColumnName.ToString());
+
+
+                HttpContext.Current.Response.Write(@"</font>");
+
+                HttpContext.Current.Response.Write("</B>");
+                HttpContext.Current.Response.Write("</Td>");
+            }
+            HttpContext.Current.Response.Write("</TR>");
+
+
+            //  string searchTermName, string searchTermLastName, string searchTermPatronymic, string searchTermPhone, string searchTermMarketingInfo, int? searchTermAgeFrom, int? searchTermAgeTo, string searchTermBirthDateFrom, string searchTermBirthDateTo
+
+
+
+            foreach (DataRow row in clients.Rows)
+            {
+                //if (nums.Contains(row.Field<int>("ID")) )
+                //      {
+                //    HttpContext.Current.Response.Write("<TR>");
+                //    for (int i = 0; i < clients.Columns.Count; i++)
+                //    {
+                //        HttpContext.Current.Response.Write("<Td>");
+                //        HttpContext.Current.Response.Write(row[i].ToString());
+                //        HttpContext.Current.Response.Write("</Td>");
+                //    }
+
+                //    HttpContext.Current.Response.Write("</TR>");
+
+                //}
+
+
+
+                HttpContext.Current.Response.Write("<TR>");
+                for (int i = 0; i < clients.Columns.Count; i++)
+                {
+                    HttpContext.Current.Response.Write("<Td>");
+                    HttpContext.Current.Response.Write(row[i].ToString());
+                    HttpContext.Current.Response.Write("</Td>");
+                }
+
+                HttpContext.Current.Response.Write("</TR>");
+
+
+
+
+
+            }
+
+            HttpContext.Current.Response.Write("</Table>");
+            HttpContext.Current.Response.Write("</font>");
+            HttpContext.Current.Response.Flush();
+            HttpContext.Current.Response.End();
+
 
         }
 

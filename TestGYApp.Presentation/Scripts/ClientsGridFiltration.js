@@ -3,6 +3,7 @@
 var sortingOrder = "FullName asc";
 //var allItemsChecked;
 var clients; //переменная для хранения выборки в xml
+var emptyGrid; //если грид пустой после фильтрации - ставим в да, иначе - нет
 
 
 
@@ -176,7 +177,10 @@ $(function () {
     //Кнопка "Сформировать отчет"
     $("[id*=ClientReportButton]").live("click", function () {
         var test = $("[id*=CheckedItemsCollector]").val();
-        if (test === "") {
+        if (emptyGrid = true || !(checkedItemsInfo.generalCheckboxChecked || checkedItemsInfo.checkedItemsArray !== null || checkedItemsInfo.uncheckedItemsArray !== null))
+
+
+        {
             bootbox.alert(
                 {
                     message: "Не выбрано ни одного элемента",
@@ -184,9 +188,28 @@ $(function () {
                 }
 
                 );
+
+
+            alert("START...");
+            //  $("[id*=ServerReportButton]").click();
+
+
+            BuildExcelReport();
+
+
         }
 
-        else { $("[id*=ServerReportButton]").click(); }
+        else {
+
+            alert("START...");
+          //  $("[id*=ServerReportButton]").click();
+
+
+            BuildExcelReport();
+
+
+
+        }
         
     });
 
@@ -663,6 +686,7 @@ function OnSuccess(response) {
     }
     $("[id*=MyClientsGridView] tr").not($("[id*=MyClientsGridView] tr:first-child")).remove();
     if (clients.length > 0) {
+        emptyGrid = false; //грид не пустой
         $.each(clients, function () {
             var customer = $(this);
 
@@ -752,6 +776,8 @@ function OnSuccess(response) {
     
 
     } else { //если ничего не найдено:
+
+        emptyGrid = true; //грид не пустой
         var empty_row = row.clone(true);
         $("td:first-child", empty_row).attr("colspan", $("td", row).length);
         $("td:first-child", empty_row).attr("align", "center");
@@ -765,4 +791,51 @@ function OnSuccess(response) {
 
     }
 };
-    
+
+function BuildExcelReport() {
+
+    //Объект со значениями фильтров
+    var myFilters = {
+        sortOrder: sortingOrder,
+        searchTermName: SearchTermName(),
+        searchTermLastName: SearchTermLastName(),
+        searchTermPatronymic: SearchTermPatronymic(),
+        searchTermPhone: SearchTermPhone(),
+        searchTermMarketingInfo: SearchTermMarketingInfo(),
+        searchTermAgeFrom: SearchTermAgeFrom(),
+        searchTermAgeTo: SearchTermAgeTo(),
+        searchTermBirthDateFrom: SearchTermBirthDateFrom(),
+        searchTermBirthDateTo: SearchTermBirthDateTo(),
+        pageIndex: 1
+    };
+
+    var filters = JSON.stringify(filters)
+
+    var filters = JSON.stringify(filters)
+
+    $.ajax({
+        type: "POST",
+        url: "TestPage.aspx/BuildExcelReport",
+        data: JSON.stringify({
+            generalCheckboxChecked: checkedItemsInfo.generalCheckboxChecked,
+            checkedItemsArray: checkedItemsInfo.checkedItemsArray,
+            uncheckedItemsArray: checkedItemsInfo.uncheckedItemsArray,
+            filters: myFilters
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+       // success: OnSuccess,
+        failure: function (response) {
+            alert(response.d);
+            alert("failure");
+        },
+        error: function (response) {
+            alert(response.d);
+            alert("error");
+        }
+    });
+
+
+
+
+};

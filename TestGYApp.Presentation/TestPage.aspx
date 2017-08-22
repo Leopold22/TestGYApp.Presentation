@@ -128,7 +128,9 @@
                 <div class="gridClients">
                     <asp:ImageButton ID="AddClientButton" runat="server" ImageUrl="~/Images/AddButton.png" CssClass="FunctionalButton"  OnClick="AddClientButton_Click" Height="40px" />
                     <asp:ImageButton ID="ClearFiltersButton" runat="server" ImageUrl="~/Images/filterTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false" /> 
-                    <asp:ImageButton ID="ServerReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="ReportButton_Click"  />                   
+                    <asp:ImageButton ID="ServerReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"  /> 
+                    <%--<asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="ReportButton_Click"  />--%>                   
+                    
                     <asp:ImageButton ID="ClientReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"   />
                      <%--<asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"  />--%>
                     <%--<asp:ImageButton ID="SortTestButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="SortTestButton_Click" />--%>

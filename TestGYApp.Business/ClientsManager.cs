@@ -98,9 +98,9 @@ namespace TestGYApp.Business
 
 
 
-        public void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        public static DataTable BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
         {
-            Data.ClientsRepository.BuildExcelReport(checkedItems, filters);
+           return Data.ClientsRepository.BuildExcelReport(checkedItems, filters);
 
         }
 

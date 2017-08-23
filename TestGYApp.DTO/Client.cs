@@ -69,5 +69,9 @@ namespace TestGYApp.DTO
         public string[] UncheckedItemsArray { get; set; }
     }
 
+    public class CheckedItemsList {
+
+        CheckedItemsInfo CheckedItems { get; set; }
+    }
 
 }

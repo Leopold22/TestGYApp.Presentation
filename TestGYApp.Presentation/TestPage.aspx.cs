@@ -393,15 +393,35 @@ namespace TestGYApp.Presentation
 
 
 
+
+        //test
+
         [WebMethod]
-       // public static void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
-        public static void BuildExcelReport(bool generalCheckboxChecked, string[] checkedItemsArray, string[]  uncheckedItemsArray, DTO.ClientFilterObject filters)
+        // public static void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        public static void BuildExcelReportTest(bool generalCheckboxChecked, string[] checkedItemsArray)
 
         {
-            DTO.CheckedItemsInfo checkedItems = new DTO.CheckedItemsInfo();
-            checkedItems.GeneralCheckboxChecked = generalCheckboxChecked;
-            checkedItems.CheckedItemsArray = checkedItemsArray;
-            checkedItems.UncheckedItemsArray = uncheckedItemsArray;
+            string test = "test";
+            test = test + test;
+
+        }
+
+
+
+        [WebMethod]
+        //public static void BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
+        public static void BuildExcelReport(DTO.CheckedItemsInfo checkedItems)
+
+        //public static void BuildExcelReport(bool generalCheckboxChecked, string[] checkedItemsArray, string[]  uncheckedItemsArray, DTO.ClientFilterObject filters)
+
+        {
+
+            DTO.ClientFilterObject filters = new DTO.ClientFilterObject();
+
+            //DTO.CheckedItemsInfo checkedItems = new DTO.CheckedItemsInfo();
+            //checkedItems.GeneralCheckboxChecked = generalCheckboxChecked;
+            //checkedItems.CheckedItemsArray = checkedItemsArray;
+            //checkedItems.UncheckedItemsArray = uncheckedItemsArray;
 
 
             DataTable clients = new DataTable();

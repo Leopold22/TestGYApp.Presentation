@@ -811,17 +811,27 @@ function BuildExcelReport() {
 
     var filters = JSON.stringify(filters)
 
-    var filters = JSON.stringify(filters)
+   // var filters = JSON.stringify(filters)
+    var gcc = checkedItemsInfo.generalCheckboxChecked;
+    var postData = {
+        checkedItems: checkedItemsInfo
+        //,
+        //filters: myFilters
+    };
 
     $.ajax({
         type: "POST",
         url: "TestPage.aspx/BuildExcelReport",
-        data: JSON.stringify({
-            generalCheckboxChecked: checkedItemsInfo.generalCheckboxChecked,
-            checkedItemsArray: checkedItemsInfo.checkedItemsArray,
-            uncheckedItemsArray: checkedItemsInfo.uncheckedItemsArray,
-            filters: myFilters
-        }),
+        data: JSON.stringify(postData),
+         
+
+
+        //JSON.stringify({
+        //    generalCheckboxChecked: checkedItemsInfo.generalCheckboxChecked,
+        //    checkedItemsArray: checkedItemsInfo.checkedItemsArray,
+        //    uncheckedItemsArray: checkedItemsInfo.uncheckedItemsArray,
+        //    filters: myFilters
+        //}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
        // success: OnSuccess,

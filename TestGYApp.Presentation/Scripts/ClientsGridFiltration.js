@@ -66,7 +66,7 @@ $(function () {
     $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").live("click", function () {
 
         var checkboxElementId = $(this).attr('id');
-        var itemID = checkboxElementId.match(/\d+/);
+        var itemID = checkboxElementId.match(/\d+/)[0];
         var elementAdress = "[id*=MyClientsGridView] tr td.CheckboxField [id=" + checkboxElementId + "]:checkbox:checked";
         var isChecked = $(elementAdress).length > 0;
 
@@ -809,12 +809,27 @@ function BuildExcelReport() {
         pageIndex: 1
     };
 
+
+    var checkedItemsPost =
+        {
+            generalCheckboxChecked: checkedItemsInfo.generalCheckboxChecked,
+            checkedItems: checkedItemsInfo.checkedItemsArray.join(),
+            uncheckedItems: checkedItemsInfo.uncheckedItemsArray.join()
+
+            //checkedItems: checkedItemsInfo.checkedItemsArray.toString(),
+            //uncheckedItems: checkedItemsInfo.checkedItemsArray.toString()
+            //checkedItems = checkedItemsInfo.checkedItemsArray.toString(),
+            //uncheckedItems = checkedItemsInfo.uncheckedItemsArray.toString()
+        }
+
+      
+
     var filters = JSON.stringify(filters)
 
    // var filters = JSON.stringify(filters)
     var gcc = checkedItemsInfo.generalCheckboxChecked;
     var postData = {
-        checkedItems: checkedItemsInfo
+        checkedItems: checkedItemsPost
         //,
         //filters: myFilters
     };
@@ -834,7 +849,10 @@ function BuildExcelReport() {
         //}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-       // success: OnSuccess,
+        success: function (response) {
+            alert(response.d);
+            alert("success");
+        },
         failure: function (response) {
             alert(response.d);
             alert("failure");
@@ -842,6 +860,14 @@ function BuildExcelReport() {
         error: function (response) {
             alert(response.d);
             alert("error");
+            //var blob = new Blob([response.data], { type: "application/vnd.ms-excel" });
+            //if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            //    window.navigator.msSaveOrOpenBlob(blob, fileName);
+            //} else {
+            //    var objectUrl = URL.createObjectURL(blob);
+            //    window.open(objectUrl);
+            //}
+
         }
     });
 

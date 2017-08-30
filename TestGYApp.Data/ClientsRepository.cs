@@ -409,6 +409,7 @@ namespace TestGYApp.Data
             DataTable clients = new DataTable();
             //clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
             clients = GetFilteredClientsTable(filters);
+          
 
 
             // УБИРАЕМ ЛИШНИЕ КОЛОНКИ
@@ -459,10 +460,15 @@ namespace TestGYApp.Data
 
             }
 
+            //задаем первичный ключ!
+            string clientsPrimaryKey = "ID";
+            clients.PrimaryKey = new DataColumn[] { clients.Columns[clientsPrimaryKey] };
+
             int clientsColumnsCount = clients.Columns.Count;
 
             for (int i = clientsColumnsCount; i > reportSettingColumns.Count(); i--)
             {
+                if (!(clients.Columns[i-1] == clients.Columns[clientsPrimaryKey]))
                 clients.Columns.RemoveAt(i-1);
             }
             
@@ -532,9 +538,19 @@ namespace TestGYApp.Data
 
         public static DataTable BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
         {
+
+            //string[] checkedItemsArrayConverted = new []{checkedItems.checkedItems};
+            //string[] uncheckedItemsArrayConverted = new[] { checkedItems.uncheckedItems};
+
+           // string[] checkedItemsArrayConverted = new[] { checkedItems.checkedItems };
+            //string[] uncheckedItemsArrayConverted = new[] { checkedItems.uncheckedItems };
+
+            string[] checkedItemsArrayConverted = checkedItems.checkedItems.Split(',');
+            string[] uncheckedItemsArrayConverted = checkedItems.uncheckedItems.Split(',');
+
             //DataSet ds = new DataSet();
             DataTable clients = GetClientsForExcel(filters);
-            clients.PrimaryKey = new DataColumn[] { clients.Columns["ID"] };
+           // clients.PrimaryKey = new DataColumn[] { clients.Columns["ID"] };
             // ds.Tables.Add(clients);
 
             DataTable excelClients = clients.Clone();
@@ -542,7 +558,7 @@ namespace TestGYApp.Data
 
             if (checkedItems.GeneralCheckboxChecked)
             {
-                foreach (var item in checkedItems.UncheckedItemsArray)
+                foreach (var item in uncheckedItemsArrayConverted)
                 {
                     // DataRow row = clients.Rows.Find(item);
                     int rowIndex = clients.Rows.IndexOf(clients.Rows.Find(item));
@@ -551,7 +567,7 @@ namespace TestGYApp.Data
             }
             else
             {
-                foreach (var item in checkedItems.CheckedItemsArray)
+                foreach (var item in checkedItemsArrayConverted)
                 {
                     
                     // DataRow row = clients.Rows.Find(item);

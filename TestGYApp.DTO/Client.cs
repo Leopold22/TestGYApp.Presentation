@@ -65,8 +65,12 @@ namespace TestGYApp.DTO
     public class CheckedItemsInfo
     {
         public bool GeneralCheckboxChecked { get; set; }
-        public string[] CheckedItemsArray { get; set; }
-        public string[] UncheckedItemsArray { get; set; }
+        //public string[] CheckedItemsArray { get; set; }
+        //public string[] UncheckedItemsArray { get; set; }
+
+        public string checkedItems { get; set; }
+        public string uncheckedItems { get; set; }
+
     }
 
     public class CheckedItemsList {

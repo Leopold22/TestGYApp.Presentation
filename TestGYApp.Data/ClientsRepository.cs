@@ -16,6 +16,9 @@ namespace TestGYApp.Data
 {
     public class ClientsRepository
     {
+        //Первичный ключ таблицы Клиентов:
+        public static string clientsPrimaryKey = "ID";
+
         // Получение коллекции посетителей
         public static List<DTO.Client> GetClients()
         {
@@ -407,27 +410,13 @@ namespace TestGYApp.Data
         {
             //получили полную таблицу Clients с учетом фильтров
             DataTable clients = new DataTable();
-            //clients = GetFilteredClientsTable(searchTermName, searchTermLastName, searchTermPatronymic, searchTermPhone, searchTermMarketingInfo, searchTermAgeFrom, searchTermAgeTo, searchTermBirthDateFrom, searchTermBirthDateTo);
             clients = GetFilteredClientsTable(filters);
           
 
 
-            // УБИРАЕМ ЛИШНИЕ КОЛОНКИ
-
-
-            //исходный набор колонок
-            string[] columnNames = (from clientColumn in clients.Columns.Cast<DataColumn>()
-                                    select clientColumn.ColumnName).ToArray();
-
-            //колонки, которые должны присутствовать в отчете
-             string[] reportColumns = new string[] { "FullName", "Email", "Age" };
-
-
+            // получаем объект настроек отчета
             string reportSettingValue = SettingsRepository.GetGlobalSettingValue("ClientsReport");
-
-
-            // получаем объект настроек
-            var  reportSetting = XDocument.Parse(reportSettingValue);
+            var reportSetting = XDocument.Parse(reportSettingValue);
 
            
             var reportSettingColumns = (from r in reportSetting.Root.Elements("column")
@@ -456,42 +445,18 @@ namespace TestGYApp.Data
                     clients.Columns[name].ColumnName = dispName;
                 }
 
-             //   excelClients
-
             }
 
-            //задаем первичный ключ!
-            string clientsPrimaryKey = "ID";
+            //задаем первичный ключ
             clients.PrimaryKey = new DataColumn[] { clients.Columns[clientsPrimaryKey] };
 
             int clientsColumnsCount = clients.Columns.Count;
-
+            // удаляем лишние колонки
             for (int i = clientsColumnsCount; i > reportSettingColumns.Count(); i--)
             {
                 if (!(clients.Columns[i-1] == clients.Columns[clientsPrimaryKey]))
                 clients.Columns.RemoveAt(i-1);
             }
-            
-
-
-            ////удаляем лишние колонки
-            //List<DataColumn> columnsToRemove = new List<DataColumn> { };
-
-            //foreach (DataColumn column in clients.Columns)
-            //{
-            //    int columnPosition = Array.IndexOf(reportColumns, column.ColumnName);
-            //    if (columnPosition == -1) {
-            //       columnsToRemove.Add(column);
-            //    }
-            //}
-
-            
-            //foreach (DataColumn column in columnsToRemove)
-            //{
-            //    clients.Columns.Remove(column.ColumnName);
-            //}
-
-   
 
 
             return clients;
@@ -522,11 +487,6 @@ namespace TestGYApp.Data
                         dt.Rows[0]["PageSize"] = pageSize;
                         dt.Rows[0]["RecordCount"] = cmd.Parameters["@RecordCount"].Value;
                         ds.Tables.Add(dt);
-
-
-                      
-
-                       
                         return ds.Tables["Clients"];
                     }
 
@@ -538,50 +498,40 @@ namespace TestGYApp.Data
 
         public static DataTable BuildExcelReport(DTO.CheckedItemsInfo checkedItems, DTO.ClientFilterObject filters)
         {
-
-            //string[] checkedItemsArrayConverted = new []{checkedItems.checkedItems};
-            //string[] uncheckedItemsArrayConverted = new[] { checkedItems.uncheckedItems};
-
-           // string[] checkedItemsArrayConverted = new[] { checkedItems.checkedItems };
-            //string[] uncheckedItemsArrayConverted = new[] { checkedItems.uncheckedItems };
-
             string[] checkedItemsArrayConverted = checkedItems.checkedItems.Split(',');
             string[] uncheckedItemsArrayConverted = checkedItems.uncheckedItems.Split(',');
 
-            //DataSet ds = new DataSet();
             DataTable clients = GetClientsForExcel(filters);
-           // clients.PrimaryKey = new DataColumn[] { clients.Columns["ID"] };
-            // ds.Tables.Add(clients);
-
             DataTable excelClients = clients.Clone();
-
 
             if (checkedItems.GeneralCheckboxChecked)
             {
                 foreach (var item in uncheckedItemsArrayConverted)
                 {
-                    // DataRow row = clients.Rows.Find(item);
-                    int rowIndex = clients.Rows.IndexOf(clients.Rows.Find(item));
-                    clients.Rows.RemoveAt(rowIndex);
+                    if (!(item == ""))
+                    {
+                        int rowIndex = clients.Rows.IndexOf(clients.Rows.Find(item));
+                        clients.Rows.RemoveAt(rowIndex);
+                    }
                 }
+
+                excelClients = clients.Copy();
             }
             else
             {
+
                 foreach (var item in checkedItemsArrayConverted)
                 {
-                    
-                    // DataRow row = clients.Rows.Find(item);
                     int rowIndex = clients.Rows.IndexOf(clients.Rows.Find(item));
-                    clients.Rows.RemoveAt(rowIndex);
-
-                    //excelClients.
+                    excelClients.Rows.Add(clients.Rows[rowIndex].ItemArray);
                 }
 
             }
 
-
-            return clients;
-
+            //удаляем колонку с первичным ключом
+            excelClients.PrimaryKey = null;
+            excelClients.Columns.RemoveAt(excelClients.Columns[clientsPrimaryKey].Ordinal);
+            return excelClients;
         }
 
 

@@ -31,6 +31,15 @@ namespace TestGYApp.Presentation {
         protected global::System.Web.UI.WebControls.TextBox UncheckedItemsCollector;
         
         /// <summary>
+        /// GeneralCheckbox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox GeneralCheckbox;
+        
+        /// <summary>
         /// FirstNameFilterTextBox control.
         /// </summary>
         /// <remarks>

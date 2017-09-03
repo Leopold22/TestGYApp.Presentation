@@ -10,7 +10,7 @@ using System.IO;
 using System.Web;
 using System.Globalization;
 using System.Linq;
-//using ClosedXML.Excel;
+using ClosedXML.Excel;
 
 
 namespace TestGYApp.Presentation
@@ -117,26 +117,53 @@ namespace TestGYApp.Presentation
         }
 
 
-        protected void ReportButton_Click(object sender, ImageClickEventArgs e, DataTable clients)
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// ////////////////////////////////////////////////////////////////////
+        /// 
+
+        protected void ReportButton_Click(object sender, ImageClickEventArgs e)
         {
-            // CheckedItemsCollector.Text = "123";
 
+            //собираем информацию о выбранных элементах в объект
+            DTO.CheckedItemsInfo checkedItemsInfo = new DTO.CheckedItemsInfo();
+            checkedItemsInfo.checkedItems = CheckedItemsCollector.Text;
+            checkedItemsInfo.uncheckedItems = UncheckedItemsCollector.Text;
+            checkedItemsInfo.GeneralCheckboxChecked = GeneralCheckbox.Checked;
+
+            //собираем значения фильтров в объект
+            DTO.ClientFilterObject filters = new DTO.ClientFilterObject();
+            filters.searchTermName = FirstNameFilterTextBox.Text;
+            filters.searchTermLastName = LastNameFilterTextBox.Text;
+            filters.searchTermPatronymic = PatronymicFilterTextBox.Text;
+            filters.searchTermPhone = PhoneFilterTextBox.Text;
+            if (!(AgeFromFilterTextBox.Text == "")) { filters.searchTermAgeFrom = int.Parse(AgeFromFilterTextBox.Text);  };
+            if (!(AgeToFilterTextBox.Text == "")) { filters.searchTermAgeTo = int.Parse(AgeToFilterTextBox.Text); };
+
+            filters.searchTermMarketingInfo = MarketingInfoDropDownFilter.Text;  ///???
+
+            if (!(BirthDateFromFilterTextBox.Text == "")) { filters.searchTermBirthDateFrom = BirthDateFromFilterTextBox.Text; };
+            if (!(BirthDateToFilterTextBox.Text == "")) { filters.searchTermBirthDateTo = BirthDateToFilterTextBox.Text; };
+
+            //filters.searchTermBirthDateFrom = BirthDateFromFilterTextBox.Text;
+            //filters.searchTermBirthDateTo = BirthDateToFilterTextBox.Text;
+
+
+            //получаем выборку с учетом фильтров и выбранных элементов
+            DataTable clients = new DataTable();
+            clients = Business.ClientsManager.BuildExcelReport(checkedItemsInfo, filters);
+
+
+            CompileExcelContentTest(clients);
             
-
-            string CheckedItems = CheckedItemsCollector.Text;
-
-            if (CheckedItems == "")
-            {
-
-                return;
-
-            }
-
-
-            int[] nums = Array.ConvertAll(CheckedItems.Split(','), int.Parse);
-
-
-            ExporttoExcel(nums);
 
         }
 
@@ -290,12 +317,22 @@ namespace TestGYApp.Presentation
             DTO.ClientFilterObject filters = new DTO.ClientFilterObject();
             DataTable clients = new DataTable();
             clients = Business.ClientsManager.BuildExcelReport(checkedItems, filters);
-            CompileExcelContent(clients);
+            TestPage test = new TestPage();
+            HttpContext.Current.Response.Flush();
+            HttpContext.Current.Response.End();
+            test.CompileExcelContentTest(clients);
+
+          //  checkedItems.checkedItems = Request.Form[];
+           // return "Hello!";
+
         }
 
 
-        public static void CompileExcelContent(DataTable clients)
+        protected void CompileExcelContent(DataTable clients)
         {
+
+
+
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.Buffer = true;
             HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=Reports.xls");
@@ -314,6 +351,8 @@ namespace TestGYApp.Presentation
 
             for (int j = 0; j < columnscount; j++)
             {
+
+
                 HttpContext.Current.Response.Write(@"<Td bgcolor='#490b41' ' >");
                 HttpContext.Current.Response.Write("<B>");
                 HttpContext.Current.Response.Write(@"<font color=""white"">");
@@ -340,32 +379,42 @@ namespace TestGYApp.Presentation
             HttpContext.Current.Response.Write("</font>");
             HttpContext.Current.Response.Flush();
             HttpContext.Current.Response.End();
+          
 
         }
 
-        //public static void CompileExcelContentTest(DataTable clients) {
+        protected void CompileExcelContentTest(DataTable clients)
+        {
+
+            //DataTable clients = new DataTable();
+            //clients = GetClientsForExcel(new DTO.ClientFilterObject());
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+               // wb.Worksheets.Add(clients, "Клиенты");
+                var ws = wb.Worksheets.Add(clients, "Клиенты");
+                ws.Row(1).Cells(true).Style.Fill.BackgroundColor = XLColor.FromHtml("#490B41");
+                //ws.Cells()
+
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.Buffer = true;
+                HttpContext.Current.Response.Charset = "";
+                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                HttpContext.Current.Response.AddHeader("content-disposition", "attachment;filename=Отчет.xlsx");
+                using (MemoryStream MyMemoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(MyMemoryStream);
+                    MyMemoryStream.WriteTo(HttpContext.Current.Response.OutputStream);
+                    HttpContext.Current.Response.Flush();
+                    HttpContext.Current.Response.End();
+                }
+            }
 
 
-        //    using (XLWorkbook wb = new XLWorkbook())
-        //    {
-        //        wb.Worksheets.Add(clients, "Customers");
-
-        //        Response.Clear();
-        //        Response.Buffer = true;
-        //        Response.Charset = "";
-        //        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        //        Response.AddHeader("content-disposition", "attachment;filename=SqlExport.xlsx");
-        //        using (MemoryStream MyMemoryStream = new MemoryStream())
-        //        {
-        //            wb.SaveAs(MyMemoryStream);
-        //            MyMemoryStream.WriteTo(Response.OutputStream);
-        //            Response.Flush();
-        //            Response.End();
-        //        }
-        //    }
+        }
 
 
-        //}
+
 
 
     }

@@ -45,7 +45,10 @@
                      <%-- Скрытые контролы для работы с чекбоксами: --%>
                     <asp:TextBox ID="CheckedItemsCollector" runat="server" placeholder="My checked values..." Width="192px" Height="25px" Visible="true"></asp:TextBox>
                     <asp:TextBox ID="UncheckedItemsCollector" runat="server" placeholder="My unckecked values..." Width="192px" Height="25px" Visible="true"></asp:TextBox>
-
+                    <asp:CheckBox ID="GeneralCheckbox" runat="server" Visible="true"></asp:CheckBox>
+                  
+                    
+                    <%--<iframe id="iframe" style="display:none;"></iframe>--%>
 
                     Список клиентов<br />
                     <br />
@@ -54,7 +57,7 @@
        <asp:TextBox ID="LastNameFilterTextBox" runat="server" placeholder="Фамилия..." Width="192px" Height="25px"></asp:TextBox>
                     &nbsp;&nbsp;&nbsp;             
         
-        <asp:TextBox ID="PatronymicFilterTextBox" runat="server" placeholder="Отчество..." Width="192px" Height="25px"></asp:TextBox>
+        <asp:TextBox ID="PatronymicFilterTextBox" runat="server"     placeholder="Отчество..." Width="192px" Height="25px"></asp:TextBox>
                     &nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="PhoneFilterTextBox" runat="server" placeholder="Телефон..." Width="192px" Height="25px"></asp:TextBox>
                     &nbsp;&nbsp;&nbsp;
@@ -128,7 +131,7 @@
                 <div class="gridClients">
                     <asp:ImageButton ID="AddClientButton" runat="server" ImageUrl="~/Images/AddButton.png" CssClass="FunctionalButton"  OnClick="AddClientButton_Click" Height="40px" />
                     <asp:ImageButton ID="ClearFiltersButton" runat="server" ImageUrl="~/Images/filterTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false" /> 
-                    <asp:ImageButton ID="ServerReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"  /> 
+                    <asp:ImageButton ID="ServerReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="ReportButton_Click"  /> 
                     <%--<asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClick="ReportButton_Click"  />--%>                   
                     
                     <asp:ImageButton ID="ClientReportButton" runat="server" ImageUrl="~/Images/reportIconTest.png" CssClass="FunctionalButton" Height="40px" OnClientClick="return false"   />

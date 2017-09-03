@@ -10,7 +10,7 @@ var emptyGrid; //если грид пустой после фильтрации 
 $(function () {
   //  $("[id*=CheckedItemsCollector]").hide();
     $("[id*=ServerReportButton]").hide();
-    $("[id*=MyClientsGridView] tr th.CheckboxHeader").html("<input type=\"checkbox\" id=\"selectAllCheckBox\" class=\"selectAllCheckBox\" >"); //рисуем общий чекбокс
+    $("[id*=MyClientsGridView] tr th.CheckboxHeader").html("<input type=\"checkbox\" id=\"selectAllCheckBox\"  name=\"selectAllCheckBox\" class=\"selectAllCheckBox\" >"); //рисуем общий чекбокс
 });
 
 
@@ -41,6 +41,7 @@ $(function () {
 
     //при клике на общий чекбокс
     $("[id*=MyClientsGridView] tr th.CheckboxHeader .selectAllCheckBox").live("click", function () {
+       
         checkedItemsInfo.checkedItemsArray.splice(0, checkedItemsInfo.checkedItemsArray.length);
         checkedItemsInfo.uncheckedItemsArray.splice(0, checkedItemsInfo.uncheckedItemsArray.length);
         $("[id*=UncheckedItemsCollector]").val(checkedItemsInfo.uncheckedItemsArray);
@@ -53,9 +54,12 @@ $(function () {
         if (checkedItemsInfo.generalCheckboxChecked) 
         {
             $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").attr("checked", true);
+            $("[id*=GeneralCheckbox]").attr("checked", true);
+            
         }
         else {
             $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").prop("checked", false);
+            $("[id*=GeneralCheckbox]").attr("checked", false);
         }
 
 
@@ -64,7 +68,7 @@ $(function () {
 
     //при клике на чекбокс
     $("[id*=MyClientsGridView] tr td.CheckboxField .selectItemCheckBox").live("click", function () {
-
+    
         var checkboxElementId = $(this).attr('id');
         var itemID = checkboxElementId.match(/\d+/)[0];
         var elementAdress = "[id*=MyClientsGridView] tr td.CheckboxField [id=" + checkboxElementId + "]:checkbox:checked";
@@ -176,40 +180,59 @@ $(function () {
 
     //Кнопка "Сформировать отчет"
     $("[id*=ClientReportButton]").live("click", function () {
+
+        //var iCallID;
+        //function InitializeService() {
+        //    service.useService(http://localhost:49346/ReportDownload.asmx?wsdl,
+        //        "ReportDownload");
+        //    service.ReportDownload.callService("ReportDownload");
+        //}
+        //function ShowResult() {
+        //    alert(event.result.value);
+        //}
+
+      //  TestTest();
+
+  
+
+        //BuildExcelReport();
+        ////  $("[id*=ServerReportButton]").click();
         var test = $("[id*=CheckedItemsCollector]").val();
-        if (emptyGrid = true || !(checkedItemsInfo.generalCheckboxChecked || checkedItemsInfo.checkedItemsArray !== null || checkedItemsInfo.uncheckedItemsArray !== null))
+
+        //if (emptyGrid = true || !(checkedItemsInfo.generalCheckboxChecked || checkedItemsInfo.checkedItemsArray !== null || checkedItemsInfo.uncheckedItemsArray !== null))
 
 
-        {
-            bootbox.alert(
-                {
-                    message: "Не выбрано ни одного элемента",
-                    size: 'small'
-                }
+        //{
+        //    bootbox.alert(
+        //        {
+        //            message: "Не выбрано ни одного элемента",
+        //            size: 'small'
+        //        }
 
-                );
-
-
-            alert("START...");
-            //  $("[id*=ServerReportButton]").click();
+        //        );
 
 
-            BuildExcelReport();
+           // alert("111START...");
+           //   $("[id*=ServerReportButton]").click();
+
+            alert("погнали");
+         // BuildExcelReport();
+               $("[id*=ServerReportButton]").click();
 
 
-        }
+        //}
 
-        else {
+        //else {
 
-            alert("START...");
-          //  $("[id*=ServerReportButton]").click();
-
-
-            BuildExcelReport();
+        //  //  alert("START...");
+        //  //  $("[id*=ServerReportButton]").click();
 
 
+        // //   BuildExcelReport();
 
-        }
+
+
+        //}
         
     });
 
@@ -847,19 +870,23 @@ function BuildExcelReport() {
         //    uncheckedItemsArray: checkedItemsInfo.uncheckedItemsArray,
         //    filters: myFilters
         //}),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            alert(response.d);
-            alert("success");
-        },
-        failure: function (response) {
-            alert(response.d);
-            alert("failure");
-        },
-        error: function (response) {
-            alert(response.d);
-            alert("error");
+      //  contentType: "application/json; charset=utf-8"
+        //,
+        ////dataType: "json",
+        //success: function (response) {
+        //    alert(response.d);
+        //    alert("success");
+        //},
+        //failure: function (response) {
+        //    alert(response.d);
+        //    alert("failure");
+        //},
+        //error: function (response) {
+        //    alert(response.d);
+        //    alert("error");
+
+
+
             //var blob = new Blob([response.data], { type: "application/vnd.ms-excel" });
             //if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             //    window.navigator.msSaveOrOpenBlob(blob, fileName);
@@ -868,10 +895,31 @@ function BuildExcelReport() {
             //    window.open(objectUrl);
             //}
 
-        }
+
+
+        //}
     });
 
 
 
 
 };
+
+
+
+//function TestTest()
+//{
+
+
+//    $.get(
+//        "/TestPage.aspx/Add",
+//        {
+//            param1: "param1",
+//            param2: 2
+//        },
+//        onAjaxSuccess
+//    );
+
+
+
+//}
